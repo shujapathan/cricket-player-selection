@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Player Selection</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #222;
+        }
+
+        .team {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .team h2 {
+            margin-top: 0;
+        }
+
+        .players {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .player {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: #fafafa;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .player:hover {
+            background: #e8f0fe;
+        }
+
+        .player.selected {
+            background: #4caf50;
+            color: white;
+            border-color: #4caf50;
+        }
+
+        #status {
+            text-align: center;
+            margin: 20px;
+            font-weight: bold;
+        }
+
+        button {
+            display: block;
+            margin: 25px auto;
+            padding: 14px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            background: #1976d2;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #125ca1;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🏏 Cricket Player Selection</h1>
+
+    <div id="status">Loading players...</div>
+
+    <div class="team">
+        <h2>Team A</h2>
+        <div id="teamA" class="players"></div>
+    </div>
+
+    <div class="team">
+        <h2>Team B</h2>
+        <div id="teamB" class="players"></div>
+    </div>
+
+    <button onclick="showSelection()">Show Selection</button>
+
+</div>
+
+<script>
+
+const API_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnQDKhsU35eReJfpy09N4OxRXdemyHQxAIcIIEkC8vVSgOuXP1QBEkOgrOtzsHE5avlQNQqCUWWUTXylbWBYj3V0m1_Suhia1ghb1AxvWIhxHJ7ZW3k8qQTcV_Te64TldzlxBLiLwdDXuuUOtxSABymZmGSpEIKH77ZRTp1cMz0tIv7ns96vkGDE1ZSTMWG2dcCmvHEJUNRnREbAlWr1n0H36gL1XNInOMYONf6aELqkbrJF2Rb18NKeS7fRbg1kNqGHLGVrHblFztJ5YeGZdbR830FS_w&lib=MR8tRzo_3YwvEnMJAOT5QmwS7g1xLMLOv";
+
+async function loadPlayers() {
+
+    try {
+
+        const response = await fetch(API_URL);
+
+        const data = await response.json();
+
+        if (!data.success) {
+            throw new Error("Unable to load players");
+        }
+
+        document.getElementById("status").innerText =
+            `${data.players.length} players loaded successfully`;
+
+        const teamA = document.getElementById("teamA");
+        const teamB = document.getElementById("teamB");
+
+        data.players.forEach(player => {
+
+            const div = document.createElement("div");
+
+            div.className = "player";
+            div.innerText = player.name;
+
+            div.onclick = function() {
+                div.classList.toggle("selected");
+            };
+
+            if (player.team === "A") {
+                teamA.appendChild(div);
+            } else {
+                teamB.appendChild(div);
+            }
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById("status").innerText =
+            "❌ Failed to load players";
+
+    }
+}
+
+function showSelection() {
+
+    const selected = document.querySelectorAll(".player.selected");
+
+    let names = [];
+
+    selected.forEach(player => {
+        names.push(player.innerText);
+    });
+
+    if (names.length === 0) {
+        alert("Please select at least one player.");
+        return;
+    }
+
+    alert("Selected Players:\n\n" + names.join("\n"));
+}
+
+loadPlayers();
+
+</script>
+
+</body>
+</html>

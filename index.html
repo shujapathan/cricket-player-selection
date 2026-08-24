@@ -736,6 +736,8 @@
 const API_URL =
 "https://script.google.com/macros/s/AKfycbzLpnsEmypbynjiTA9jFVkvbw8YyALOe7q3boFgBNk-djd7xmPfWgIdRfDnh_C0L_yX/exec";
 
+const API_TIMEOUT = 15000;
+
 
 /* =====================================================
    DATA
@@ -776,16 +778,30 @@ let touchSourceElement = null;
 
 async function loadPlayers() {
 
+    const status = document.getElementById("status");
+
+    status.innerText = "Loading players...";
+
     try {
+
+        const controller = new AbortController();
+
+        const timeout = setTimeout(() => {
+            controller.abort();
+        }, API_TIMEOUT);
 
         const response = await fetch(API_URL, {
             method: "GET",
-            redirect: "follow"
+            redirect: "follow",
+            cache: "no-store",
+            signal: controller.signal
         });
+
+        clearTimeout(timeout);
 
         if (!response.ok) {
             throw new Error(
-                "HTTP error: " + response.status
+                "Server returned HTTP " + response.status
             );
         }
 
@@ -793,13 +809,13 @@ async function loadPlayers() {
 
         if (!data.success) {
             throw new Error(
-                data.error || "Unable to load players"
+                data.error || "Google Sheet API failed"
             );
         }
 
         allPlayers = data.players || [];
 
-        document.getElementById("status").innerText =
+        status.innerText =
             `${allPlayers.length} players loaded successfully`;
 
         const teamA =
@@ -838,17 +854,24 @@ async function loadPlayers() {
 
     } catch (error) {
 
-        console.error(
-            "Player loading error:",
-            error
-        );
+        console.error("Player loading error:", error);
 
-        document.getElementById("status").innerText =
-            "❌ Failed to load players: " +
-            error.message;
+        if (error.name === "AbortError") {
+
+            status.innerText =
+                "❌ Google Sheets connection timed out. Please check your internet connection and try again.";
+
+        } else {
+
+            status.innerText =
+                "❌ Failed to load players: " +
+                error.message;
+
+        }
+
     }
-}
 
+}
 
         if (!data.success) {
 

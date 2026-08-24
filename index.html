@@ -26,11 +26,6 @@
         h1 {
             text-align: center;
             color: #222;
-            margin-bottom: 10px;
-        }
-
-        h2 {
-            margin-top: 0;
         }
 
         .screen {
@@ -62,7 +57,6 @@
             background: #fafafa;
             cursor: pointer;
             text-align: center;
-            transition: 0.2s;
             user-select: none;
         }
 
@@ -74,18 +68,6 @@
             background: #4caf50;
             color: white;
             border-color: #4caf50;
-        }
-
-        .player.assigned-team1 {
-            background: #1976d2;
-            color: white;
-            border-color: #1976d2;
-        }
-
-        .player.assigned-team2 {
-            background: #ff9800;
-            color: white;
-            border-color: #ff9800;
         }
 
         #status {
@@ -101,6 +83,15 @@
             margin-top: 20px;
             text-align: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .instruction {
+            text-align: center;
+            background: #fff8e1;
+            border: 1px solid #ffe082;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
         }
 
         .assignment-area {
@@ -131,11 +122,16 @@
         }
 
         .assigned-player {
-            padding: 10px;
+            padding: 12px;
             margin: 8px 0;
             border-radius: 7px;
             background: #f1f1f1;
             text-align: center;
+            cursor: pointer;
+        }
+
+        .assigned-player:hover {
+            background: #e0e0e0;
         }
 
         .button-area {
@@ -171,21 +167,20 @@
             background: #555;
         }
 
+        .shuffle {
+            background: #673ab7;
+        }
+
+        .shuffle:hover {
+            background: #512da8;
+        }
+
         .success {
             background: #4caf50;
         }
 
         .success:hover {
             background: #388e3c;
-        }
-
-        .instruction {
-            text-align: center;
-            background: #fff8e1;
-            border: 1px solid #ffe082;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 15px;
         }
 
         .final-team {
@@ -231,74 +226,127 @@
 <div class="container">
 
     <!-- SCREEN 1 -->
+
     <div id="screen1" class="screen active">
 
         <h1>🏏 Cricket Player Selection</h1>
 
-        <div id="status">Loading players...</div>
-
-        <div class="team">
-            <h2>Team A</h2>
-            <div id="teamA" class="players"></div>
+        <div id="status">
+            Loading players...
         </div>
 
         <div class="team">
+
+            <h2>Team A</h2>
+
+            <div id="teamA" class="players"></div>
+
+        </div>
+
+        <div class="team">
+
             <h2>Team B</h2>
+
             <div id="teamB" class="players"></div>
+
         </div>
 
         <div class="selection-summary">
+
             Selected Players:
             <strong id="selectedCount">0</strong>
+
         </div>
 
         <div class="button-area">
-            <button class="primary" onclick="goToAssignment()">
+
+            <button class="primary"
+                    onclick="goToAssignment()">
+
                 Continue
+
             </button>
+
         </div>
 
     </div>
 
 
     <!-- SCREEN 2 -->
+
     <div id="screen2" class="screen">
 
-        <h1>👥 Create Two Teams</h1>
+        <h1>🎲 Create Two Teams</h1>
 
         <div class="instruction">
-            Click on a player to assign them to Team 1 or Team 2.
-            <br>
-            Players will be assigned alternately.
+
+            Players have been randomly distributed as evenly as possible.
+
+            <br><br>
+
+            Click a player to move them between Team 1 and Team 2.
+
         </div>
 
+
         <div class="selection-summary">
-            Selected Players:
-            <strong id="assignmentCount">0</strong>
+
+            Team 1:
+            <strong id="team1Count">0</strong>
+
+            &nbsp;&nbsp; | &nbsp;&nbsp;
+
+            Team 2:
+            <strong id="team2Count">0</strong>
+
         </div>
+
 
         <div class="assignment-area">
 
             <div class="assignment-team team1">
+
                 <h2>🔵 Team 1</h2>
+
                 <div id="team1Players"></div>
+
             </div>
 
+
             <div class="assignment-team team2">
+
                 <h2>🟠 Team 2</h2>
+
                 <div id="team2Players"></div>
+
             </div>
 
         </div>
 
+
         <div class="button-area">
 
-            <button class="secondary" onclick="goBackToSelection()">
-                ← Back
+            <button class="shuffle"
+                    onclick="shuffleTeams()">
+
+                🎲 Shuffle Teams
+
             </button>
 
-            <button class="success" onclick="finishTeams()">
+
+            <button class="secondary"
+                    onclick="goBackToSelection()">
+
+                ← Back
+
+            </button>
+
+
+            <button class="success"
+                    onclick="finishTeams()">
+
                 Create Teams
+
             </button>
 
         </div>
@@ -307,9 +355,11 @@
 
 
     <!-- SCREEN 3 -->
+
     <div id="screen3" class="screen">
 
         <h1>🏆 Final Teams</h1>
+
 
         <div class="final-team">
 
@@ -319,6 +369,7 @@
 
         </div>
 
+
         <div class="final-team">
 
             <h2>🟠 Team 2</h2>
@@ -327,14 +378,22 @@
 
         </div>
 
+
         <div class="button-area">
 
-            <button class="secondary" onclick="goBackToAssignment()">
+            <button class="secondary"
+                    onclick="goBackToAssignment()">
+
                 ← Modify Teams
+
             </button>
 
-            <button class="primary" onclick="startAgain()">
+
+            <button class="primary"
+                    onclick="startAgain()">
+
                 Start Again
+
             </button>
 
         </div>
@@ -346,7 +405,9 @@
 
 <script>
 
-const API_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnQDKhsU35eReJfpy09N4OxRXdemyHQxAIcIIEkC8vVSgOuXP1QBEkOgrOtzsHE5avlQNQqCUWWUTXylbWBYj3V0m1_Suhia1ghb1AxvWIhxHJ7ZW3k8qQTcV_Te64TldzlxBLiLwdDXuuUOtxSABymZmGSpEIKH77ZRTp1cMz0tIv7ns96vkGDE1ZSTMWG2dcCmvHEJUNRnREbAlWr1n0H36gL1XNInOMYONf6aELqkbrJF2Rb18NKeS7fRbg1kNqGHLGVrHblFztJ5YeGZdbR830FS_w&lib=MR8tRzo_3YwvEnMJAOT5QmwS7g1xLMLOv";
+const API_URL =
+"https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnQDKhsU35eReJfpy09N4OxRXdemyHQxAIcIIEkC8vVSgOuXP1QBEkOgrOtzsHE5avlQNQqCUWWUTXylbWBYj3V0m1_Suhia1ghb1AxvWIhxHJ7ZW3k8qQTcV_Te64TldzlxBLiLwdDXuuUOtxSABymZmGSpEIKH77ZRTp1cMz0tIv7ns96vkGDE1ZSTMWG2dcCmvHEJUNRnREbAlWr1n0H36gL1XNInOMYONf6aELqkbrJF2Rb18NKeS7fRbg1kNqGHLGVrHblFztJ5YeGZdbR830FS_w&lib=MR8tRzo_3YwvEnMJAOT5QmwS7g1xLMLOv";
+
 
 let allPlayers = [];
 
@@ -366,23 +427,35 @@ async function loadPlayers() {
         const data = await response.json();
 
         if (!data.success) {
+
             throw new Error("Unable to load players");
+
         }
 
         allPlayers = data.players;
 
+
         document.getElementById("status").innerText =
             `${allPlayers.length} players loaded successfully`;
 
-        const teamA = document.getElementById("teamA");
-        const teamB = document.getElementById("teamB");
+
+        const teamA =
+            document.getElementById("teamA");
+
+        const teamB =
+            document.getElementById("teamB");
+
 
         teamA.innerHTML = "";
+
         teamB.innerHTML = "";
+
 
         allPlayers.forEach(player => {
 
-            const div = document.createElement("div");
+            const div =
+                document.createElement("div");
+
 
             div.className = "player";
 
@@ -390,11 +463,13 @@ async function loadPlayers() {
 
             div.dataset.id = player.id;
 
+
             div.onclick = function() {
 
                 togglePlayer(player.id, div);
 
             };
+
 
             if (player.team === "A") {
 
@@ -407,6 +482,7 @@ async function loadPlayers() {
             }
 
         });
+
 
     } catch (error) {
 
@@ -422,15 +498,19 @@ async function loadPlayers() {
 
 function togglePlayer(playerId, element) {
 
-    const index = selectedPlayers.findIndex(
-        player => player.id === playerId
-    );
+    const index =
+        selectedPlayers.findIndex(
+            player => player.id === playerId
+        );
+
 
     if (index === -1) {
 
-        const player = allPlayers.find(
-            player => player.id === playerId
-        );
+        const player =
+            allPlayers.find(
+                player => player.id === playerId
+            );
+
 
         selectedPlayers.push(player);
 
@@ -443,6 +523,7 @@ function togglePlayer(playerId, element) {
         element.classList.remove("selected");
 
     }
+
 
     updateSelectedCount();
 
@@ -459,43 +540,95 @@ function updateSelectedCount() {
 
 function goToAssignment() {
 
-    if (selectedPlayers.length === 0) {
+    if (selectedPlayers.length < 2) {
 
-        alert("Please select at least one player.");
+        alert(
+            "Please select at least 2 players."
+        );
 
         return;
 
     }
 
-    document.getElementById("screen1").classList.remove("active");
 
-    document.getElementById("screen2").classList.add("active");
+    document.getElementById("screen1")
+        .classList.remove("active");
 
-    team1 = [];
-    team2 = [];
 
-    createInitialTeams();
+    document.getElementById("screen2")
+        .classList.add("active");
 
-    renderAssignment();
+
+    shuffleTeams();
 
 }
 
 
-function createInitialTeams() {
+function shuffleTeams() {
 
-    selectedPlayers.forEach((player, index) => {
+    team1 = [];
 
-        if (index % 2 === 0) {
+    team2 = [];
 
-            team1.push(player);
 
-        } else {
+    /*
+       Create a copy so that the
+       original selection order
+       remains unchanged.
+    */
 
-            team2.push(player);
+    let shuffled =
+        [...selectedPlayers];
 
-        }
 
-    });
+    /*
+       Fisher-Yates shuffle
+    */
+
+    for (
+        let i = shuffled.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() * (i + 1)
+            );
+
+
+        [
+            shuffled[i],
+            shuffled[j]
+        ] =
+        [
+            shuffled[j],
+            shuffled[i]
+        ];
+
+    }
+
+
+    /*
+       Divide players as evenly
+       as possible.
+    */
+
+    const middle =
+        Math.ceil(
+            shuffled.length / 2
+        );
+
+
+    team1 =
+        shuffled.slice(0, middle);
+
+
+    team2 =
+        shuffled.slice(middle);
+
+
+    renderAssignment();
 
 }
 
@@ -503,22 +636,35 @@ function createInitialTeams() {
 function renderAssignment() {
 
     const team1Container =
-        document.getElementById("team1Players");
+        document.getElementById(
+            "team1Players"
+        );
+
 
     const team2Container =
-        document.getElementById("team2Players");
+        document.getElementById(
+            "team2Players"
+        );
+
 
     team1Container.innerHTML = "";
 
     team2Container.innerHTML = "";
 
+
     team1.forEach(player => {
 
-        const div = document.createElement("div");
+        const div =
+            document.createElement("div");
 
-        div.className = "assigned-player";
 
-        div.innerText = player.name;
+        div.className =
+            "assigned-player";
+
+
+        div.innerText =
+            player.name;
+
 
         div.onclick = function() {
 
@@ -526,8 +672,10 @@ function renderAssignment() {
 
         };
 
+
         div.title =
             "Click to move this player to Team 2";
+
 
         team1Container.appendChild(div);
 
@@ -536,11 +684,17 @@ function renderAssignment() {
 
     team2.forEach(player => {
 
-        const div = document.createElement("div");
+        const div =
+            document.createElement("div");
 
-        div.className = "assigned-player";
 
-        div.innerText = player.name;
+        div.className =
+            "assigned-player";
+
+
+        div.innerText =
+            player.name;
+
 
         div.onclick = function() {
 
@@ -548,16 +702,22 @@ function renderAssignment() {
 
         };
 
+
         div.title =
             "Click to move this player to Team 1";
+
 
         team2Container.appendChild(div);
 
     });
 
 
-    document.getElementById("assignmentCount").innerText =
-        selectedPlayers.length;
+    document.getElementById("team1Count").innerText =
+        team1.length;
+
+
+    document.getElementById("team2Count").innerText =
+        team2.length;
 
 }
 
@@ -566,21 +726,26 @@ function movePlayer(player, fromTeam) {
 
     if (fromTeam === 1) {
 
-        team1 = team1.filter(
-            p => p.id !== player.id
-        );
+        team1 =
+            team1.filter(
+                p => p.id !== player.id
+            );
+
 
         team2.push(player);
 
     } else {
 
-        team2 = team2.filter(
-            p => p.id !== player.id
-        );
+        team2 =
+            team2.filter(
+                p => p.id !== player.id
+            );
+
 
         team1.push(player);
 
     }
+
 
     renderAssignment();
 
@@ -589,19 +754,27 @@ function movePlayer(player, fromTeam) {
 
 function finishTeams() {
 
-    if (team1.length === 0 || team2.length === 0) {
+    if (
+        team1.length === 0 ||
+        team2.length === 0
+    ) {
 
         alert(
-            "Both Team 1 and Team 2 must have at least one player."
+            "Both teams must have at least one player."
         );
 
         return;
 
     }
 
-    document.getElementById("screen2").classList.remove("active");
 
-    document.getElementById("screen3").classList.add("active");
+    document.getElementById("screen2")
+        .classList.remove("active");
+
+
+    document.getElementById("screen3")
+        .classList.add("active");
+
 
     renderFinalTeams();
 
@@ -611,10 +784,16 @@ function finishTeams() {
 function renderFinalTeams() {
 
     const finalTeam1 =
-        document.getElementById("finalTeam1");
+        document.getElementById(
+            "finalTeam1"
+        );
+
 
     const finalTeam2 =
-        document.getElementById("finalTeam2");
+        document.getElementById(
+            "finalTeam2"
+        );
+
 
     finalTeam1.innerHTML = "";
 
@@ -623,12 +802,17 @@ function renderFinalTeams() {
 
     team1.forEach((player, index) => {
 
-        const div = document.createElement("div");
+        const div =
+            document.createElement("div");
 
-        div.className = "final-player";
+
+        div.className =
+            "final-player";
+
 
         div.innerText =
             `${index + 1}. ${player.name}`;
+
 
         finalTeam1.appendChild(div);
 
@@ -637,12 +821,17 @@ function renderFinalTeams() {
 
     team2.forEach((player, index) => {
 
-        const div = document.createElement("div");
+        const div =
+            document.createElement("div");
 
-        div.className = "final-player";
+
+        div.className =
+            "final-player";
+
 
         div.innerText =
             `${index + 1}. ${player.name}`;
+
 
         finalTeam2.appendChild(div);
 
@@ -653,18 +842,24 @@ function renderFinalTeams() {
 
 function goBackToSelection() {
 
-    document.getElementById("screen2").classList.remove("active");
+    document.getElementById("screen2")
+        .classList.remove("active");
 
-    document.getElementById("screen1").classList.add("active");
+
+    document.getElementById("screen1")
+        .classList.add("active");
 
 }
 
 
 function goBackToAssignment() {
 
-    document.getElementById("screen3").classList.remove("active");
+    document.getElementById("screen3")
+        .classList.remove("active");
 
-    document.getElementById("screen2").classList.add("active");
+
+    document.getElementById("screen2")
+        .classList.add("active");
 
 }
 
@@ -677,15 +872,23 @@ function startAgain() {
 
     team2 = [];
 
-    document.querySelectorAll(".player").forEach(
-        element => element.classList.remove("selected")
-    );
+
+    document.querySelectorAll(".player")
+        .forEach(
+            element =>
+                element.classList.remove("selected")
+        );
+
 
     updateSelectedCount();
 
-    document.getElementById("screen3").classList.remove("active");
 
-    document.getElementById("screen1").classList.add("active");
+    document.getElementById("screen3")
+        .classList.remove("active");
+
+
+    document.getElementById("screen1")
+        .classList.add("active");
 
 }
 

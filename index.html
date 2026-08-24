@@ -6,7 +6,8 @@
     <meta charset="UTF-8">
 
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+          content="width=device-width, initial-scale=1.0,
+                   maximum-scale=1.0, user-scalable=no">
 
     <title>Cricket Player Selection</title>
 
@@ -20,7 +21,8 @@
             font-family: Arial, sans-serif;
             background: #f4f6f8;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
+            touch-action: manipulation;
         }
 
         .container {
@@ -53,7 +55,6 @@
             display: grid;
             grid-template-columns:
                 repeat(auto-fit, minmax(150px, 1fr));
-
             gap: 10px;
         }
 
@@ -65,6 +66,8 @@
             cursor: pointer;
             text-align: center;
             user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
         }
 
         .player:hover {
@@ -113,8 +116,13 @@
             padding: 20px;
             border-radius: 12px;
             min-height: 300px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+            box-shadow:
+                0 2px 8px rgba(0,0,0,0.1);
+
             transition: 0.2s;
+
+            position: relative;
         }
 
         .assignment-team.team1 {
@@ -139,7 +147,7 @@
         }
 
         .assigned-player {
-            padding: 14px;
+            padding: 15px;
             margin: 8px 0;
             border-radius: 8px;
             background: #f1f1f1;
@@ -147,15 +155,70 @@
             cursor: grab;
             border: 1px solid #ddd;
             user-select: none;
-            transition: 0.2s;
+            -webkit-user-select: none;
+
+            /*
+             * Important for mobile.
+             * Prevents browser scrolling while
+             * dragging a player.
+             */
+            touch-action: none;
+
+            transition: 0.15s;
+
+            position: relative;
+
+            z-index: 1;
         }
 
         .assigned-player:hover {
             background: #e0e0e0;
         }
 
+        .assigned-player:active {
+            cursor: grabbing;
+        }
+
         .assigned-player.dragging {
-            opacity: 0.4;
+            opacity: 0.35;
+        }
+
+        /*
+         * Mobile floating player
+         */
+
+        .touch-drag-player {
+            position: fixed;
+
+            z-index: 99999;
+
+            pointer-events: none;
+
+            padding: 15px 20px;
+
+            background: #1976d2;
+
+            color: white;
+
+            border-radius: 10px;
+
+            font-weight: bold;
+
+            box-shadow:
+                0 8px 20px
+                rgba(0,0,0,0.3);
+
+            transform:
+                translate(-50%, -50%);
+
+            white-space: nowrap;
+        }
+
+        .assignment-team.touch-target {
+            background: #e8f5e9;
+
+            box-shadow:
+                0 0 0 4px #66bb6a inset;
         }
 
         .empty-message {
@@ -185,11 +248,15 @@
             width: 38px;
             height: 38px;
             border-radius: 50%;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             background: #1976d2;
+
             color: white;
+
             flex-shrink: 0;
         }
 
@@ -212,6 +279,8 @@
             border-radius: 8px;
             cursor: pointer;
             color: white;
+
+            touch-action: manipulation;
         }
 
         .primary {
@@ -259,7 +328,9 @@
             padding: 20px;
             border-radius: 12px;
             margin-top: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+            box-shadow:
+                0 2px 8px rgba(0,0,0,0.1);
         }
 
         .final-team h2 {
@@ -287,22 +358,63 @@
             color: #c62828;
         }
 
-        @media (max-width: 600px) {
+
+        /* ===============================
+           MOBILE
+           =============================== */
+
+        @media (max-width: 700px) {
 
             body {
-                padding: 10px;
+                padding: 8px;
+            }
+
+            h1 {
+                font-size: 24px;
             }
 
             .assignment-area {
                 grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .assignment-team {
+                min-height: 250px;
+                padding: 15px;
+            }
+
+            .drop-zone {
+                min-height: 180px;
             }
 
             .players {
                 grid-template-columns:
                     repeat(2, 1fr);
+
+                gap: 8px;
+            }
+
+            .player {
+                padding: 13px 6px;
+                font-size: 14px;
+            }
+
+            .assigned-player {
+                padding: 16px;
+                font-size: 16px;
+            }
+
+            .button-area {
+                gap: 10px;
+            }
+
+            button {
+                width: 100%;
+                padding: 14px;
             }
 
         }
+
 
     </style>
 
@@ -315,7 +427,9 @@
 <div class="container">
 
 
-    <!-- SCREEN 1 -->
+    <!-- =================================================
+         SCREEN 1
+         ================================================= -->
 
     <div id="screen1"
          class="screen active">
@@ -323,6 +437,7 @@
         <h1>
             🏏 Cricket Player Selection
         </h1>
+
 
         <div id="status">
             Loading players...
@@ -366,8 +481,9 @@
 
         <div class="button-area">
 
-            <button class="primary"
-                    onclick="goToAssignment()">
+            <button
+                class="primary"
+                onclick="goToAssignment()">
 
                 Continue
 
@@ -379,7 +495,9 @@
 
 
 
-    <!-- SCREEN 2 -->
+    <!-- =================================================
+         SCREEN 2
+         ================================================= -->
 
     <div id="screen2"
          class="screen">
@@ -397,9 +515,17 @@
             <br><br>
 
             <strong>
-                Drag and drop players between
-                Team 1 and Team 2.
+                Desktop:
             </strong>
+            Drag players between teams.
+
+            <br>
+
+            <strong>
+                Mobile:
+            </strong>
+            Press and hold a player,
+            then move it to the other team.
 
         </div>
 
@@ -445,6 +571,7 @@
             </div>
 
 
+
             <!-- TEAM 2 -->
 
             <div id="team2DropArea"
@@ -463,29 +590,33 @@
 
             </div>
 
+
         </div>
 
 
         <div class="button-area">
 
-            <button class="shuffle"
-                    onclick="shuffleTeams()">
+            <button
+                class="shuffle"
+                onclick="shuffleTeams()">
 
                 🎲 Shuffle Again
 
             </button>
 
 
-            <button class="secondary"
-                    onclick="goBackToSelection()">
+            <button
+                class="secondary"
+                onclick="goBackToSelection()">
 
                 ← Back
 
             </button>
 
 
-            <button class="success"
-                    onclick="finishTeams()">
+            <button
+                class="success"
+                onclick="finishTeams()">
 
                 Create Teams
 
@@ -497,7 +628,9 @@
 
 
 
-    <!-- SCREEN 3 -->
+    <!-- =================================================
+         SCREEN 3
+         ================================================= -->
 
     <div id="screen3"
          class="screen">
@@ -549,32 +682,36 @@
 
         <div class="button-area">
 
-            <button class="secondary"
-                    onclick="goBackToAssignment()">
+            <button
+                class="secondary"
+                onclick="goBackToAssignment()">
 
                 ← Modify Teams
 
             </button>
 
 
-            <button class="shuffle"
-                    onclick="generateBattingOrders()">
+            <button
+                class="shuffle"
+                onclick="generateBattingOrders()">
 
                 🎲 Regenerate Orders
 
             </button>
 
 
-            <button class="save"
-                    onclick="saveBattingOrders()">
+            <button
+                class="save"
+                onclick="saveBattingOrders()">
 
                 💾 Save Batting Orders
 
             </button>
 
 
-            <button class="primary"
-                    onclick="startAgain()">
+            <button
+                class="primary"
+                onclick="startAgain()">
 
                 Start Again
 
@@ -593,11 +730,12 @@
 
 
 /* =====================================================
-   API URL
+   API
    ===================================================== */
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbzLpnsEmypbynjiTA9jFVkvbw8YyALOe7q3boFgBNk-djd7xmPfWgIdRfDnh_C0L_yX/exec";
+
 
 /* =====================================================
    DATA
@@ -612,6 +750,24 @@ let team1 = [];
 let team2 = [];
 
 let draggedPlayerId = null;
+
+
+/*
+ * Mobile touch variables
+ */
+
+let touchPlayerId = null;
+
+let touchStartX = 0;
+
+let touchStartY = 0;
+
+let touchDragging = false;
+
+let touchClone = null;
+
+let touchSourceElement = null;
+
 
 
 /* =====================================================
@@ -732,8 +888,9 @@ async function loadPlayers() {
 }
 
 
+
 /* =====================================================
-   PLAYER SELECTION
+   SELECT PLAYERS
    ===================================================== */
 
 function togglePlayer(
@@ -786,6 +943,7 @@ function togglePlayer(
 }
 
 
+
 /* =====================================================
    SELECTED COUNT
    ===================================================== */
@@ -800,8 +958,9 @@ function updateSelectedCount() {
 }
 
 
+
 /* =====================================================
-   GO TO TEAM CREATION
+   GO TO ASSIGNMENT
    ===================================================== */
 
 function goToAssignment() {
@@ -836,6 +995,7 @@ function goToAssignment() {
     shuffleTeams();
 
 }
+
 
 
 /* =====================================================
@@ -905,8 +1065,9 @@ function shuffleTeams() {
 }
 
 
+
 /* =====================================================
-   RENDER TEAMS
+   RENDER TEAM ASSIGNMENT
    ===================================================== */
 
 function renderAssignment() {
@@ -990,8 +1151,9 @@ function renderAssignment() {
 }
 
 
+
 /* =====================================================
-   CREATE DRAGGABLE PLAYER
+   CREATE PLAYER CARD
    ===================================================== */
 
 function createPlayerCard(
@@ -1019,6 +1181,10 @@ function createPlayerCard(
     div.dataset.id =
         player.id;
 
+
+    /*
+     * Desktop drag
+     */
 
     div.ondragstart =
         function(event) {
@@ -1054,6 +1220,34 @@ function createPlayerCard(
         };
 
 
+    /*
+     * Mobile touch
+     */
+
+    div.addEventListener(
+        "pointerdown",
+        function(event) {
+
+            /*
+             * Only use this for touch.
+             */
+
+            if (
+                event.pointerType === "touch"
+            ) {
+
+                startTouchDrag(
+                    event,
+                    player,
+                    div
+                );
+
+            }
+
+        }
+    );
+
+
     container.appendChild(
         div
     );
@@ -1061,8 +1255,430 @@ function createPlayerCard(
 }
 
 
+
 /* =====================================================
-   DRAG & DROP
+   MOBILE TOUCH DRAG START
+   ===================================================== */
+
+function startTouchDrag(
+    event,
+    player,
+    element
+) {
+
+    event.preventDefault();
+
+
+    touchPlayerId =
+        player.id;
+
+
+    touchSourceElement =
+        element;
+
+
+    touchStartX =
+        event.clientX;
+
+
+    touchStartY =
+        event.clientY;
+
+
+    touchDragging =
+        false;
+
+
+    /*
+     * Wait a little before starting
+     * the drag. This prevents a normal
+     * tap from becoming a drag.
+     */
+
+    element._touchTimer =
+        setTimeout(
+            function() {
+
+                touchDragging =
+                    true;
+
+
+                element.classList.add(
+                    "dragging"
+                );
+
+
+                createTouchClone(
+                    player,
+                    event.clientX,
+                    event.clientY
+                );
+
+            },
+            250
+        );
+
+
+    element.setPointerCapture(
+        event.pointerId
+    );
+
+
+    element.addEventListener(
+        "pointermove",
+        handleTouchMove
+    );
+
+
+    element.addEventListener(
+        "pointerup",
+        handleTouchEnd
+    );
+
+
+    element.addEventListener(
+        "pointercancel",
+        handleTouchEnd
+    );
+
+}
+
+
+
+/* =====================================================
+   CREATE FLOATING TOUCH PLAYER
+   ===================================================== */
+
+function createTouchClone(
+    player,
+    x,
+    y
+) {
+
+    touchClone =
+        document.createElement(
+            "div"
+        );
+
+
+    touchClone.className =
+        "touch-drag-player";
+
+
+    touchClone.innerText =
+        player.name;
+
+
+    touchClone.style.left =
+        x + "px";
+
+
+    touchClone.style.top =
+        y + "px";
+
+
+    document.body.appendChild(
+        touchClone
+    );
+
+}
+
+
+
+/* =====================================================
+   TOUCH MOVE
+   ===================================================== */
+
+function handleTouchMove(
+    event
+) {
+
+    if (!touchDragging) {
+
+        return;
+
+    }
+
+
+    event.preventDefault();
+
+
+    if (touchClone) {
+
+        touchClone.style.left =
+            event.clientX + "px";
+
+
+        touchClone.style.top =
+            event.clientY + "px";
+
+    }
+
+
+    highlightTouchTarget(
+        event.clientX,
+        event.clientY
+    );
+
+}
+
+
+
+/* =====================================================
+   FIND TOUCH TARGET
+   ===================================================== */
+
+function highlightTouchTarget(
+    x,
+    y
+) {
+
+    document
+        .querySelectorAll(
+            ".assignment-team"
+        )
+        .forEach(
+            team => {
+
+                team.classList.remove(
+                    "touch-target"
+                );
+
+            }
+        );
+
+
+    const element =
+        document.elementFromPoint(
+            x,
+            y
+        );
+
+
+    if (!element) {
+
+        return;
+
+    }
+
+
+    const team =
+        element.closest(
+            ".assignment-team"
+        );
+
+
+    if (team) {
+
+        team.classList.add(
+            "touch-target"
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   TOUCH END
+   ===================================================== */
+
+function handleTouchEnd(
+    event
+) {
+
+    clearTimeout(
+        touchSourceElement?._touchTimer
+    );
+
+
+    if (!touchDragging) {
+
+        cleanupTouchDrag();
+
+        return;
+
+    }
+
+
+    event.preventDefault();
+
+
+    const element =
+        document.elementFromPoint(
+            event.clientX,
+            event.clientY
+        );
+
+
+    const target =
+        element
+            ? element.closest(
+                ".assignment-team"
+            )
+            : null;
+
+
+    if (target) {
+
+        let targetTeam;
+
+
+        if (
+            target.id ===
+            "team1DropArea"
+        ) {
+
+            targetTeam = 1;
+
+        } else if (
+            target.id ===
+            "team2DropArea"
+        ) {
+
+            targetTeam = 2;
+
+        }
+
+
+        if (targetTeam) {
+
+            movePlayerToTeam(
+                touchPlayerId,
+                targetTeam
+            );
+
+        }
+
+    }
+
+
+    cleanupTouchDrag();
+
+}
+
+
+
+/* =====================================================
+   MOVE PLAYER
+   ===================================================== */
+
+function movePlayerToTeam(
+    playerId,
+    targetTeam
+) {
+
+    const player =
+        allPlayers.find(
+            p =>
+                p.id === playerId
+        );
+
+
+    if (!player) {
+
+        return;
+
+    }
+
+
+    team1 =
+        team1.filter(
+            p =>
+                p.id !== playerId
+        );
+
+
+    team2 =
+        team2.filter(
+            p =>
+                p.id !== playerId
+        );
+
+
+    if (
+        targetTeam === 1
+    ) {
+
+        team1.push(
+            player
+        );
+
+    } else {
+
+        team2.push(
+            player
+        );
+
+    }
+
+
+    renderAssignment();
+
+}
+
+
+
+/* =====================================================
+   CLEAN TOUCH DRAG
+   ===================================================== */
+
+function cleanupTouchDrag() {
+
+    if (
+        touchSourceElement
+    ) {
+
+        touchSourceElement.classList.remove(
+            "dragging"
+        );
+
+    }
+
+
+    if (touchClone) {
+
+        touchClone.remove();
+
+        touchClone =
+            null;
+
+    }
+
+
+    document
+        .querySelectorAll(
+            ".assignment-team"
+        )
+        .forEach(
+            team => {
+
+                team.classList.remove(
+                    "touch-target"
+                );
+
+            }
+        );
+
+
+    touchPlayerId =
+        null;
+
+
+    touchSourceElement =
+        null;
+
+
+    touchDragging =
+        false;
+
+}
+
+
+
+/* =====================================================
+   DESKTOP DROP
    ===================================================== */
 
 function allowDrop(event) {
@@ -1123,54 +1739,13 @@ function dropPlayer(
     }
 
 
-    const player =
-        allPlayers.find(
-            p =>
-                p.id === playerId
-        );
-
-
-    if (!player) {
-
-        return;
-
-    }
-
-
-    team1 =
-        team1.filter(
-            p =>
-                p.id !== playerId
-        );
-
-
-    team2 =
-        team2.filter(
-            p =>
-                p.id !== playerId
-        );
-
-
-    if (
-        targetTeam === 1
-    ) {
-
-        team1.push(
-            player
-        );
-
-    } else {
-
-        team2.push(
-            player
-        );
-
-    }
-
-
-    renderAssignment();
+    movePlayerToTeam(
+        playerId,
+        targetTeam
+    );
 
 }
+
 
 
 /* =====================================================
@@ -1207,14 +1782,10 @@ function finishTeams() {
     );
 
 
-    /*
-       Automatically generate
-       random batting orders.
-    */
-
     generateBattingOrders();
 
 }
+
 
 
 /* =====================================================
@@ -1246,10 +1817,6 @@ function generateBattingOrders() {
 }
 
 
-/* =====================================================
-   ASSIGN RANDOM ORDER
-   ===================================================== */
-
 function assignRandomBattingOrder(
     team
 ) {
@@ -1257,10 +1824,6 @@ function assignRandomBattingOrder(
     const shuffled =
         [...team];
 
-
-    /*
-       Fisher-Yates shuffle
-    */
 
     for (
         let i =
@@ -1290,10 +1853,6 @@ function assignRandomBattingOrder(
     }
 
 
-    /*
-       Assign 1, 2, 3...
-    */
-
     return shuffled.map(
         (player, index) => ({
 
@@ -1306,6 +1865,7 @@ function assignRandomBattingOrder(
     );
 
 }
+
 
 
 /* =====================================================
@@ -1395,6 +1955,7 @@ function renderFinalTeams() {
     );
 
 }
+
 
 
 /* =====================================================
@@ -1528,6 +2089,7 @@ async function saveBattingOrders() {
 }
 
 
+
 /* =====================================================
    MESSAGE
    ===================================================== */
@@ -1575,6 +2137,7 @@ function showMessage(
 }
 
 
+
 /* =====================================================
    BACK
    ===================================================== */
@@ -1613,6 +2176,7 @@ function goBackToAssignment() {
     );
 
 }
+
 
 
 /* =====================================================
@@ -1657,11 +2221,13 @@ function startAgain() {
 }
 
 
+
 /* =====================================================
-   START APP
+   START
    ===================================================== */
 
 loadPlayers();
+
 
 </script>
 

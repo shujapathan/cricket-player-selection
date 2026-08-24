@@ -12,10 +12,6 @@
 
 <style>
 
-/* =====================================================
-   GENERAL
-   ===================================================== */
-
 * {
     box-sizing: border-box;
 }
@@ -56,47 +52,35 @@ h1 {
     padding: 20px;
     margin-top: 20px;
     border-radius: 12px;
-
-    box-shadow:
-        0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .players {
     display: grid;
-
     grid-template-columns:
         repeat(auto-fit, minmax(150px, 1fr));
-
     gap: 10px;
 }
 
 .player {
     padding: 14px;
-
     border: 1px solid #ccc;
-
     border-radius: 8px;
-
     background: #fafafa;
-
     text-align: center;
-
     cursor: pointer;
-
     user-select: none;
-
     -webkit-user-select: none;
+    transition: 0.15s;
 }
 
 .player:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
 }
 
 .player.selected {
     background: #4caf50;
-
     color: white;
-
     border-color: #4caf50;
 }
 
@@ -107,11 +91,8 @@ h1 {
 
 #status {
     text-align: center;
-
     margin: 20px;
-
     font-weight: bold;
-
     min-height: 22px;
 }
 
@@ -122,35 +103,23 @@ h1 {
 
 .selection-summary {
     background: white;
-
     padding: 15px;
-
     border-radius: 10px;
-
     margin-top: 20px;
-
     text-align: center;
-
-    box-shadow:
-        0 1px 5px rgba(0,0,0,0.05);
 }
 
 
 /* =====================================================
-   INSTRUCTIONS
+   INSTRUCTION
    ===================================================== */
 
 .instruction {
     text-align: center;
-
     background: #fff8e1;
-
     padding: 12px;
-
     border-radius: 8px;
-
     margin-top: 15px;
-
     line-height: 1.5;
 }
 
@@ -160,85 +129,79 @@ h1 {
    ===================================================== */
 
 .assignment-area {
-
     display: grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
 }
 
 .assignment-team {
-
     min-height: 350px;
-
-    transition:
-        background 0.2s,
-        box-shadow 0.2s;
+    transition: 0.2s;
 }
 
 .assignment-team.drag-over {
-
     background: #e8f5e9;
-
-    box-shadow:
-        0 0 0 3px #4caf50 inset;
+    box-shadow: 0 0 0 3px #4caf50 inset;
 }
 
 .drop-zone {
-
     min-height: 250px;
 }
 
 .assigned-player {
-
     padding: 15px;
-
     margin: 8px 0;
-
     border-radius: 8px;
-
     background: #f1f1f1;
-
     border: 1px solid #ddd;
-
     cursor: grab;
-
     user-select: none;
-
     -webkit-user-select: none;
-
     touch-action: none;
+    transition: 0.15s;
 }
 
-.assigned-player:active {
-
-    cursor: grabbing;
+.assigned-player.selected-mobile {
+    background: #1976d2;
+    color: white;
+    border-color: #1976d2;
+    transform: scale(1.02);
 }
 
 .assigned-player.dragging {
-
     opacity: 0.4;
+}
+
+.empty-message {
+    text-align: center;
+    color: #888;
+    padding: 50px 10px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
 }
 
 
 /* =====================================================
-   EMPTY DROP AREA
+   MOBILE MOVE CONTROLS
    ===================================================== */
 
-.empty-message {
+.mobile-controls {
+    display: none;
+}
 
+.mobile-selected-name {
     text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
 
-    color: #888;
+.move-buttons {
+    display: flex;
+    gap: 10px;
+}
 
-    padding: 50px 10px;
-
-    border:
-        2px dashed #ccc;
-
-    border-radius: 8px;
+.move-buttons button {
+    flex: 1;
 }
 
 
@@ -247,47 +210,29 @@ h1 {
    ===================================================== */
 
 .batting-player {
-
     display: flex;
-
     align-items: center;
-
     gap: 12px;
-
     padding: 12px;
-
     margin: 8px 0;
-
     background: #f5f5f5;
-
     border-radius: 8px;
-
     font-weight: bold;
 }
 
 .batting-number {
-
     width: 38px;
-
     height: 38px;
-
     border-radius: 50%;
-
     background: #1976d2;
-
     color: white;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     flex-shrink: 0;
 }
 
 .team2-batting .batting-number {
-
     background: #ff9800;
 }
 
@@ -297,61 +242,52 @@ h1 {
    ===================================================== */
 
 .button-area {
-
     display: flex;
-
     justify-content: center;
-
     gap: 15px;
-
     flex-wrap: wrap;
-
     margin: 25px 0;
 }
 
 button {
-
     padding: 13px 28px;
-
     font-size: 16px;
-
     border: none;
-
     border-radius: 8px;
-
     cursor: pointer;
-
     color: white;
 }
 
 button:active {
-
     transform: scale(0.98);
 }
 
 .primary {
-
     background: #1976d2;
 }
 
 .secondary {
-
     background: #777;
 }
 
 .shuffle {
-
     background: #673ab7;
 }
 
 .success {
-
     background: #4caf50;
 }
 
 .save {
-
     background: #00897b;
+}
+
+.move-team1 {
+    background: #1976d2;
+}
+
+.move-team2 {
+    background: #ff9800;
 }
 
 
@@ -360,40 +296,21 @@ button:active {
    ===================================================== */
 
 .saved-message {
-
     text-align: center;
-
     padding: 12px;
-
     margin-top: 20px;
-
     border-radius: 8px;
-
     font-weight: bold;
 }
 
 .success-message {
-
     background: #e8f5e9;
-
     color: #2e7d32;
 }
 
 .error-message {
-
     background: #ffebee;
-
     color: #c62828;
-}
-
-
-/* =====================================================
-   LOADING
-   ===================================================== */
-
-.loading-text {
-
-    color: #555;
 }
 
 
@@ -404,52 +321,68 @@ button:active {
 @media (max-width: 700px) {
 
     body {
-
         padding: 8px;
     }
 
     h1 {
-
         font-size: 24px;
     }
 
     .assignment-area {
-
         grid-template-columns: 1fr;
     }
 
     .players {
-
         grid-template-columns:
             repeat(2, 1fr);
-
         gap: 8px;
     }
 
     .player {
-
         padding: 13px 6px;
-
         font-size: 14px;
     }
 
     .assignment-team {
-
-        min-height: 280px;
+        min-height: 250px;
     }
 
     .assigned-player {
-
-        padding: 16px;
-
+        padding: 17px;
         font-size: 16px;
+        cursor: pointer;
+        touch-action: manipulation;
+    }
+
+    .mobile-controls {
+        display: block;
+        background: white;
+        padding: 15px;
+        margin-top: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .move-buttons {
+        flex-direction: column;
     }
 
     button {
-
         width: 100%;
-
         padding: 14px;
+    }
+
+}
+
+
+/* =====================================================
+   DESKTOP
+   ===================================================== */
+
+@media (min-width: 701px) {
+
+    .mobile-controls {
+        display: none !important;
     }
 
 }
@@ -461,13 +394,11 @@ button:active {
 
 <body>
 
-
 <div class="container">
 
 
 <!-- =====================================================
      SCREEN 1
-     PLAYER SELECTION
      ===================================================== -->
 
 <div id="screen1"
@@ -478,11 +409,8 @@ button:active {
 </h1>
 
 
-<div id="status"
-     class="loading-text">
-
+<div id="status">
 Loading players...
-
 </div>
 
 
@@ -494,7 +422,6 @@ Team A
 
 <div id="teamA"
      class="players">
-
 </div>
 
 </div>
@@ -508,7 +435,6 @@ Team B
 
 <div id="teamB"
      class="players">
-
 </div>
 
 </div>
@@ -543,7 +469,6 @@ Continue
 
 <!-- =====================================================
      SCREEN 2
-     TEAM ASSIGNMENT
      ===================================================== -->
 
 <div id="screen2"
@@ -562,7 +487,7 @@ Drag players between teams.
 <br>
 
 <strong>Mobile:</strong>
-Touch functionality will be improved in the next step.
+Tap a player and use the move buttons below.
 
 </div>
 
@@ -576,11 +501,8 @@ Touch functionality will be improved in the next step.
      class="assignment-team"
 
      ondragover="allowDrop(event)"
-
      ondrop="dropPlayer(event,1)"
-
      ondragenter="dragEnter(event)"
-
      ondragleave="dragLeave(event)">
 
 <h2>
@@ -590,7 +512,6 @@ Touch functionality will be improved in the next step.
 
 <div id="team1Players"
      class="drop-zone">
-
 </div>
 
 </div>
@@ -602,11 +523,8 @@ Touch functionality will be improved in the next step.
      class="assignment-team"
 
      ondragover="allowDrop(event)"
-
      ondrop="dropPlayer(event,2)"
-
      ondragenter="dragEnter(event)"
-
      ondragleave="dragLeave(event)">
 
 <h2>
@@ -616,8 +534,46 @@ Touch functionality will be improved in the next step.
 
 <div id="team2Players"
      class="drop-zone">
+</div>
 
 </div>
+
+</div>
+
+
+<!-- =====================================================
+     MOBILE CONTROLS
+     ===================================================== -->
+
+<div id="mobileControls"
+     class="mobile-controls">
+
+<div class="mobile-selected-name"
+     id="mobileSelectedName">
+
+Tap a player above to move them
+
+</div>
+
+
+<div class="move-buttons">
+
+<button
+    class="move-team1"
+    onclick="moveSelectedPlayer(1)">
+
+Move to Team 1
+
+</button>
+
+
+<button
+    class="move-team2"
+    onclick="moveSelectedPlayer(2)">
+
+Move to Team 2
+
+</button>
 
 </div>
 
@@ -645,7 +601,6 @@ Team 2:
 
 <div class="button-area">
 
-
 <button
     class="shuffle"
     onclick="shuffleTeams()">
@@ -672,7 +627,6 @@ Create Teams
 
 </button>
 
-
 </div>
 
 </div>
@@ -681,7 +635,6 @@ Create Teams
 
 <!-- =====================================================
      SCREEN 3
-     BATTING ORDER
      ===================================================== -->
 
 <div id="screen3"
@@ -706,9 +659,7 @@ for both teams.
 🔵 Team 1
 </h2>
 
-
 <div id="finalTeam1">
-
 </div>
 
 </div>
@@ -720,22 +671,18 @@ for both teams.
 🟠 Team 2
 </h2>
 
-
 <div id="finalTeam2"
      class="team2-batting">
-
 </div>
 
 </div>
 
 
 <div id="saveMessage">
-
 </div>
 
 
 <div class="button-area">
-
 
 <button
     class="secondary"
@@ -772,11 +719,9 @@ Start Again
 
 </button>
 
-
 </div>
 
 </div>
-
 
 </div>
 
@@ -786,7 +731,7 @@ Start Again
 
 
 /* =====================================================
-   GOOGLE APPS SCRIPT API
+   API
    ===================================================== */
 
 const API_URL =
@@ -794,7 +739,7 @@ const API_URL =
 
 
 /* =====================================================
-   LOCAL CACHE SETTINGS
+   CACHE
    ===================================================== */
 
 const PLAYER_CACHE_KEY =
@@ -802,11 +747,6 @@ const PLAYER_CACHE_KEY =
 
 const PLAYER_CACHE_TIME_KEY =
 "cricketPlayersCacheTime";
-
-
-/*
- * Cache is considered fresh for 10 minutes.
- */
 
 const CACHE_DURATION =
 10 * 60 * 1000;
@@ -826,6 +766,8 @@ let team2 = [];
 
 let draggedPlayerId = null;
 
+let selectedMobilePlayerId = null;
+
 
 /* =====================================================
    LOAD PLAYERS
@@ -839,17 +781,12 @@ function loadPlayers() {
         );
 
 
-    /*
-     * -------------------------------------------------
-     * STEP 1
-     * Try local cache first
-     * -------------------------------------------------
-     */
-
     let cachedPlayers = null;
 
-    let cacheIsFresh = false;
 
+    /*
+     * Try local browser cache
+     */
 
     try {
 
@@ -859,31 +796,12 @@ function loadPlayers() {
             );
 
 
-        const cacheTime =
-            localStorage.getItem(
-                PLAYER_CACHE_TIME_KEY
-            );
-
-
         if (cached) {
 
             cachedPlayers =
                 JSON.parse(cached);
 
         }
-
-
-        if (cacheTime) {
-
-            cacheIsFresh =
-                (
-                    Date.now() -
-                    Number(cacheTime)
-                ) <
-                CACHE_DURATION;
-
-        }
-
 
     } catch (error) {
 
@@ -896,10 +814,7 @@ function loadPlayers() {
 
 
     /*
-     * -------------------------------------------------
-     * STEP 2
-     * Immediately display cached players
-     * -------------------------------------------------
+     * Immediately show cached players
      */
 
     if (
@@ -917,21 +832,12 @@ function loadPlayers() {
         status.innerText =
             `${allPlayers.length} players loaded`;
 
-
-        /*
-         * If cache is fresh,
-         * we still refresh in background,
-         * but user does not wait for it.
-         */
-
     }
 
 
     /*
-     * -------------------------------------------------
-     * STEP 3
-     * Fetch latest players
-     * -------------------------------------------------
+     * Get latest players
+     * from Google Sheets
      */
 
     fetch(API_URL)
@@ -965,16 +871,12 @@ function loadPlayers() {
             }
 
 
-            /*
-             * Store latest data
-             */
-
             allPlayers =
                 data.players || [];
 
 
             /*
-             * Save to browser cache
+             * Update local cache
              */
 
             try {
@@ -1004,10 +906,6 @@ function loadPlayers() {
             }
 
 
-            /*
-             * Render latest players
-             */
-
             renderPlayers();
 
 
@@ -1024,12 +922,6 @@ function loadPlayers() {
                 error
             );
 
-
-            /*
-             * If cached players
-             * are already displayed,
-             * don't show an error.
-             */
 
             if (
                 allPlayers.length > 0
@@ -1094,10 +986,6 @@ function renderPlayers() {
             div.dataset.id =
                 player.id;
 
-
-            /*
-             * Restore selected state
-             */
 
             if (
                 selectedPlayers.some(
@@ -1224,7 +1112,7 @@ function togglePlayer(
 
 
 /* =====================================================
-   GO TO TEAM ASSIGNMENT
+   GO TO ASSIGNMENT
    ===================================================== */
 
 function goToAssignment() {
@@ -1319,6 +1207,10 @@ function shuffleTeams() {
         );
 
 
+    selectedMobilePlayerId =
+        null;
+
+
     renderAssignment();
 
 }
@@ -1326,7 +1218,7 @@ function shuffleTeams() {
 
 
 /* =====================================================
-   RENDER TEAM ASSIGNMENT
+   RENDER ASSIGNMENT
    ===================================================== */
 
 function renderAssignment() {
@@ -1407,12 +1299,15 @@ function renderAssignment() {
     ).innerText =
         team2.length;
 
+
+    updateMobileSelection();
+
 }
 
 
 
 /* =====================================================
-   CREATE PLAYER CARD
+   PLAYER CARD
    ===================================================== */
 
 function createPlayerCard(
@@ -1442,6 +1337,10 @@ function createPlayerCard(
         player.id;
 
 
+    /*
+     * Desktop drag start
+     */
+
     div.addEventListener(
         "dragstart",
         function(event) {
@@ -1464,6 +1363,10 @@ function createPlayerCard(
     );
 
 
+    /*
+     * Desktop drag end
+     */
+
     div.addEventListener(
         "dragend",
         function() {
@@ -1480,6 +1383,35 @@ function createPlayerCard(
     );
 
 
+    /*
+     * Mobile / touch selection
+     */
+
+    div.addEventListener(
+        "click",
+        function(event) {
+
+            /*
+             * On mobile this selects
+             * the player.
+             *
+             * On desktop this does nothing.
+             */
+
+            if (
+                window.innerWidth <= 700
+            ) {
+
+                selectMobilePlayer(
+                    player.id
+                );
+
+            }
+
+        }
+    );
+
+
     container.appendChild(
         div
     );
@@ -1489,7 +1421,132 @@ function createPlayerCard(
 
 
 /* =====================================================
-   DESKTOP DRAG AND DROP
+   MOBILE PLAYER SELECTION
+   ===================================================== */
+
+function selectMobilePlayer(
+    playerId
+) {
+
+    selectedMobilePlayerId =
+        playerId;
+
+
+    updateMobileSelection();
+
+}
+
+
+
+/* =====================================================
+   UPDATE MOBILE SELECTION
+   ===================================================== */
+
+function updateMobileSelection() {
+
+    document.querySelectorAll(
+        ".assigned-player"
+    ).forEach(
+        element => {
+
+            if (
+                element.dataset.id ===
+                selectedMobilePlayerId
+            ) {
+
+                element.classList.add(
+                    "selected-mobile"
+                );
+
+            } else {
+
+                element.classList.remove(
+                    "selected-mobile"
+                );
+
+            }
+
+        }
+    );
+
+
+    const nameElement =
+        document.getElementById(
+            "mobileSelectedName"
+        );
+
+
+    if (
+        !selectedMobilePlayerId
+    ) {
+
+        nameElement.innerText =
+            "Tap a player above to move them";
+
+        return;
+
+    }
+
+
+    const player =
+        allPlayers.find(
+            p =>
+                p.id ===
+                selectedMobilePlayerId
+        );
+
+
+    if (player) {
+
+        nameElement.innerText =
+            "Selected: " +
+            player.name;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   MOBILE MOVE PLAYER
+   ===================================================== */
+
+function moveSelectedPlayer(
+    targetTeam
+) {
+
+    if (
+        !selectedMobilePlayerId
+    ) {
+
+        alert(
+            "Please tap a player first."
+        );
+
+        return;
+
+    }
+
+
+    movePlayerToTeam(
+        selectedMobilePlayerId,
+        targetTeam
+    );
+
+
+    selectedMobilePlayerId =
+        null;
+
+
+    updateMobileSelection();
+
+}
+
+
+
+/* =====================================================
+   DESKTOP DRAG/DROP
    ===================================================== */
 
 function allowDrop(event) {
@@ -1502,6 +1559,7 @@ function allowDrop(event) {
 function dragEnter(event) {
 
     event.preventDefault();
+
 
     event.currentTarget.classList.add(
         "drag-over"
@@ -1555,7 +1613,7 @@ function dropPlayer(
 
 
 /* =====================================================
-   MOVE PLAYER
+   MOVE PLAYER TO TEAM
    ===================================================== */
 
 function movePlayerToTeam(
@@ -1566,7 +1624,8 @@ function movePlayerToTeam(
     const player =
         allPlayers.find(
             p =>
-                p.id === playerId
+                p.id ===
+                playerId
         );
 
 
@@ -1580,14 +1639,16 @@ function movePlayerToTeam(
     team1 =
         team1.filter(
             p =>
-                p.id !== playerId
+                p.id !==
+                playerId
         );
 
 
     team2 =
         team2.filter(
             p =>
-                p.id !== playerId
+                p.id !==
+                playerId
         );
 
 
@@ -1615,7 +1676,7 @@ function movePlayerToTeam(
 
 
 /* =====================================================
-   CREATE FINAL TEAMS
+   FINISH TEAMS
    ===================================================== */
 
 function finishTeams() {
@@ -1768,7 +1829,6 @@ function renderFinalTeams() {
                 `<div class="batting-number">
                     ${player.battingOrder}
                  </div>
-
                  <div>
                     ${player.name}
                  </div>`;
@@ -1799,7 +1859,6 @@ function renderFinalTeams() {
                 `<div class="batting-number">
                     ${player.battingOrder}
                  </div>
-
                  <div>
                     ${player.name}
                  </div>`;
@@ -1857,15 +1916,6 @@ async function saveBattingOrders() {
 
         }
     );
-
-
-    if (
-        assignments.length === 0
-    ) {
-
-        return;
-
-    }
 
 
     const message =
@@ -2005,6 +2055,9 @@ function startAgain() {
 
     team2 = [];
 
+    selectedMobilePlayerId =
+        null;
+
 
     document.querySelectorAll(
         ".player"
@@ -2026,6 +2079,12 @@ function startAgain() {
 
 
     document.getElementById(
+        "saveMessage"
+    ).innerHTML =
+        "";
+
+
+    document.getElementById(
         "screen3"
     ).classList.remove(
         "active"
@@ -2043,7 +2102,7 @@ function startAgain() {
 
 
 /* =====================================================
-   START APPLICATION
+   START
    ===================================================== */
 
 loadPlayers();

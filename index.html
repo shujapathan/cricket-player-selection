@@ -12,6 +12,10 @@
 
 <style>
 
+/* =====================================================
+   GENERAL
+   ===================================================== */
+
 * {
     box-sizing: border-box;
 }
@@ -40,6 +44,11 @@ h1 {
     display: block;
 }
 
+
+/* =====================================================
+   PLAYER SELECTION
+   ===================================================== */
+
 .team,
 .assignment-team,
 .final-team {
@@ -47,202 +56,400 @@ h1 {
     padding: 20px;
     margin-top: 20px;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,0.1);
 }
 
 .players {
     display: grid;
+
     grid-template-columns:
         repeat(auto-fit, minmax(150px, 1fr));
+
     gap: 10px;
 }
 
 .player {
     padding: 14px;
+
     border: 1px solid #ccc;
+
     border-radius: 8px;
+
     background: #fafafa;
+
     text-align: center;
+
     cursor: pointer;
+
     user-select: none;
+
+    -webkit-user-select: none;
+}
+
+.player:active {
+    transform: scale(0.98);
 }
 
 .player.selected {
     background: #4caf50;
+
     color: white;
+
+    border-color: #4caf50;
 }
+
+
+/* =====================================================
+   STATUS
+   ===================================================== */
 
 #status {
     text-align: center;
+
     margin: 20px;
+
     font-weight: bold;
+
+    min-height: 22px;
 }
+
+
+/* =====================================================
+   SUMMARY
+   ===================================================== */
 
 .selection-summary {
     background: white;
+
     padding: 15px;
+
     border-radius: 10px;
+
     margin-top: 20px;
+
     text-align: center;
+
+    box-shadow:
+        0 1px 5px rgba(0,0,0,0.05);
 }
+
+
+/* =====================================================
+   INSTRUCTIONS
+   ===================================================== */
 
 .instruction {
     text-align: center;
+
     background: #fff8e1;
+
     padding: 12px;
+
     border-radius: 8px;
+
     margin-top: 15px;
+
+    line-height: 1.5;
 }
 
+
+/* =====================================================
+   TEAM ASSIGNMENT
+   ===================================================== */
+
 .assignment-area {
+
     display: grid;
-    grid-template-columns: 1fr 1fr;
+
+    grid-template-columns:
+        1fr 1fr;
+
     gap: 20px;
 }
 
 .assignment-team {
+
     min-height: 350px;
+
+    transition:
+        background 0.2s,
+        box-shadow 0.2s;
 }
 
 .assignment-team.drag-over {
+
     background: #e8f5e9;
+
+    box-shadow:
+        0 0 0 3px #4caf50 inset;
 }
 
 .drop-zone {
+
     min-height: 250px;
 }
 
 .assigned-player {
+
     padding: 15px;
+
     margin: 8px 0;
+
     border-radius: 8px;
+
     background: #f1f1f1;
+
     border: 1px solid #ddd;
+
     cursor: grab;
+
     user-select: none;
 
-    /*
-     * Important for touch devices
-     */
+    -webkit-user-select: none;
+
     touch-action: none;
 }
 
+.assigned-player:active {
+
+    cursor: grabbing;
+}
+
 .assigned-player.dragging {
+
     opacity: 0.4;
 }
 
+
+/* =====================================================
+   EMPTY DROP AREA
+   ===================================================== */
+
 .empty-message {
+
     text-align: center;
+
     color: #888;
+
     padding: 50px 10px;
-    border: 2px dashed #ccc;
+
+    border:
+        2px dashed #ccc;
+
     border-radius: 8px;
 }
 
+
+/* =====================================================
+   BATTING ORDER
+   ===================================================== */
+
 .batting-player {
+
     display: flex;
+
     align-items: center;
+
     gap: 12px;
+
     padding: 12px;
+
     margin: 8px 0;
+
     background: #f5f5f5;
+
     border-radius: 8px;
+
     font-weight: bold;
 }
 
 .batting-number {
+
     width: 38px;
+
     height: 38px;
+
     border-radius: 50%;
+
     background: #1976d2;
+
     color: white;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
+    flex-shrink: 0;
 }
 
 .team2-batting .batting-number {
+
     background: #ff9800;
 }
 
+
+/* =====================================================
+   BUTTONS
+   ===================================================== */
+
 .button-area {
+
     display: flex;
+
     justify-content: center;
+
     gap: 15px;
+
     flex-wrap: wrap;
+
     margin: 25px 0;
 }
 
 button {
+
     padding: 13px 28px;
+
     font-size: 16px;
+
     border: none;
+
     border-radius: 8px;
+
     cursor: pointer;
+
     color: white;
 }
 
+button:active {
+
+    transform: scale(0.98);
+}
+
 .primary {
+
     background: #1976d2;
 }
 
 .secondary {
+
     background: #777;
 }
 
 .shuffle {
+
     background: #673ab7;
 }
 
 .success {
+
     background: #4caf50;
 }
 
 .save {
+
     background: #00897b;
 }
 
+
+/* =====================================================
+   SAVE MESSAGE
+   ===================================================== */
+
 .saved-message {
+
     text-align: center;
+
     padding: 12px;
+
     margin-top: 20px;
+
     border-radius: 8px;
+
     font-weight: bold;
 }
 
 .success-message {
+
     background: #e8f5e9;
+
     color: #2e7d32;
 }
 
 .error-message {
+
     background: #ffebee;
+
     color: #c62828;
 }
 
 
-/* ============================
+/* =====================================================
+   LOADING
+   ===================================================== */
+
+.loading-text {
+
+    color: #555;
+}
+
+
+/* =====================================================
    MOBILE
-   ============================ */
+   ===================================================== */
 
 @media (max-width: 700px) {
 
     body {
+
         padding: 8px;
     }
 
+    h1 {
+
+        font-size: 24px;
+    }
+
     .assignment-area {
+
         grid-template-columns: 1fr;
     }
 
     .players {
+
         grid-template-columns:
             repeat(2, 1fr);
+
+        gap: 8px;
+    }
+
+    .player {
+
+        padding: 13px 6px;
+
+        font-size: 14px;
+    }
+
+    .assignment-team {
+
+        min-height: 280px;
+    }
+
+    .assigned-player {
+
+        padding: 16px;
+
+        font-size: 16px;
     }
 
     button {
+
         width: 100%;
+
+        padding: 14px;
     }
 
 }
@@ -260,6 +467,7 @@ button {
 
 <!-- =====================================================
      SCREEN 1
+     PLAYER SELECTION
      ===================================================== -->
 
 <div id="screen1"
@@ -269,27 +477,39 @@ button {
 🏏 Cricket Player Selection
 </h1>
 
-<div id="status">
+
+<div id="status"
+     class="loading-text">
+
 Loading players...
+
 </div>
 
 
 <div class="team">
 
-<h2>Team A</h2>
+<h2>
+Team A
+</h2>
 
 <div id="teamA"
-     class="players"></div>
+     class="players">
+
+</div>
 
 </div>
 
 
 <div class="team">
 
-<h2>Team B</h2>
+<h2>
+Team B
+</h2>
 
 <div id="teamB"
-     class="players"></div>
+     class="players">
+
+</div>
 
 </div>
 
@@ -307,8 +527,9 @@ Selected Players:
 
 <div class="button-area">
 
-<button class="primary"
-        onclick="goToAssignment()">
+<button
+    class="primary"
+    onclick="goToAssignment()">
 
 Continue
 
@@ -322,6 +543,7 @@ Continue
 
 <!-- =====================================================
      SCREEN 2
+     TEAM ASSIGNMENT
      ===================================================== -->
 
 <div id="screen2"
@@ -340,7 +562,7 @@ Drag players between teams.
 <br>
 
 <strong>Mobile:</strong>
-Touch support will be enabled next.
+Touch functionality will be improved in the next step.
 
 </div>
 
@@ -348,32 +570,54 @@ Touch support will be enabled next.
 <div class="assignment-area">
 
 
+<!-- TEAM 1 -->
+
 <div id="team1DropArea"
      class="assignment-team"
+
      ondragover="allowDrop(event)"
-     ondrop="dropPlayer(event,1)">
+
+     ondrop="dropPlayer(event,1)"
+
+     ondragenter="dragEnter(event)"
+
+     ondragleave="dragLeave(event)">
 
 <h2>
 🔵 Team 1
 </h2>
 
+
 <div id="team1Players"
-     class="drop-zone"></div>
+     class="drop-zone">
+
+</div>
 
 </div>
 
 
+<!-- TEAM 2 -->
+
 <div id="team2DropArea"
      class="assignment-team"
+
      ondragover="allowDrop(event)"
-     ondrop="dropPlayer(event,2)">
+
+     ondrop="dropPlayer(event,2)"
+
+     ondragenter="dragEnter(event)"
+
+     ondragleave="dragLeave(event)">
 
 <h2>
 🟠 Team 2
 </h2>
 
+
 <div id="team2Players"
-     class="drop-zone"></div>
+     class="drop-zone">
+
+</div>
 
 </div>
 
@@ -401,28 +645,33 @@ Team 2:
 
 <div class="button-area">
 
-<button class="shuffle"
-        onclick="shuffleTeams()">
+
+<button
+    class="shuffle"
+    onclick="shuffleTeams()">
 
 🎲 Shuffle Again
 
 </button>
 
 
-<button class="secondary"
-        onclick="goBackToSelection()">
+<button
+    class="secondary"
+    onclick="goBackToSelection()">
 
 ← Back
 
 </button>
 
 
-<button class="success"
-        onclick="finishTeams()">
+<button
+    class="success"
+    onclick="finishTeams()">
 
 Create Teams
 
 </button>
+
 
 </div>
 
@@ -432,6 +681,7 @@ Create Teams
 
 <!-- =====================================================
      SCREEN 3
+     BATTING ORDER
      ===================================================== -->
 
 <div id="screen3"
@@ -442,13 +692,24 @@ Create Teams
 </h1>
 
 
+<div class="instruction">
+
+A random batting order has been generated
+for both teams.
+
+</div>
+
+
 <div class="final-team">
 
 <h2>
 🔵 Team 1
 </h2>
 
-<div id="finalTeam1"></div>
+
+<div id="finalTeam1">
+
+</div>
 
 </div>
 
@@ -459,47 +720,58 @@ Create Teams
 🟠 Team 2
 </h2>
 
+
 <div id="finalTeam2"
-     class="team2-batting"></div>
+     class="team2-batting">
+
+</div>
 
 </div>
 
 
-<div id="saveMessage"></div>
+<div id="saveMessage">
+
+</div>
 
 
 <div class="button-area">
 
-<button class="secondary"
-        onclick="goBackToAssignment()">
+
+<button
+    class="secondary"
+    onclick="goBackToAssignment()">
 
 ← Modify Teams
 
 </button>
 
 
-<button class="shuffle"
-        onclick="generateBattingOrders()">
+<button
+    class="shuffle"
+    onclick="generateBattingOrders()">
 
 🎲 Regenerate Orders
 
 </button>
 
 
-<button class="save"
-        onclick="saveBattingOrders()">
+<button
+    class="save"
+    onclick="saveBattingOrders()">
 
 💾 Save Batting Orders
 
 </button>
 
 
-<button class="primary"
-        onclick="startAgain()">
+<button
+    class="primary"
+    onclick="startAgain()">
 
 Start Again
 
 </button>
+
 
 </div>
 
@@ -522,6 +794,25 @@ const API_URL =
 
 
 /* =====================================================
+   LOCAL CACHE SETTINGS
+   ===================================================== */
+
+const PLAYER_CACHE_KEY =
+"cricketPlayers";
+
+const PLAYER_CACHE_TIME_KEY =
+"cricketPlayersCacheTime";
+
+
+/*
+ * Cache is considered fresh for 10 minutes.
+ */
+
+const CACHE_DURATION =
+10 * 60 * 1000;
+
+
+/* =====================================================
    VARIABLES
    ===================================================== */
 
@@ -536,12 +827,112 @@ let team2 = [];
 let draggedPlayerId = null;
 
 
-
 /* =====================================================
    LOAD PLAYERS
    ===================================================== */
 
 function loadPlayers() {
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+
+    /*
+     * -------------------------------------------------
+     * STEP 1
+     * Try local cache first
+     * -------------------------------------------------
+     */
+
+    let cachedPlayers = null;
+
+    let cacheIsFresh = false;
+
+
+    try {
+
+        const cached =
+            localStorage.getItem(
+                PLAYER_CACHE_KEY
+            );
+
+
+        const cacheTime =
+            localStorage.getItem(
+                PLAYER_CACHE_TIME_KEY
+            );
+
+
+        if (cached) {
+
+            cachedPlayers =
+                JSON.parse(cached);
+
+        }
+
+
+        if (cacheTime) {
+
+            cacheIsFresh =
+                (
+                    Date.now() -
+                    Number(cacheTime)
+                ) <
+                CACHE_DURATION;
+
+        }
+
+
+    } catch (error) {
+
+        console.log(
+            "Cache read error:",
+            error
+        );
+
+    }
+
+
+    /*
+     * -------------------------------------------------
+     * STEP 2
+     * Immediately display cached players
+     * -------------------------------------------------
+     */
+
+    if (
+        Array.isArray(cachedPlayers) &&
+        cachedPlayers.length > 0
+    ) {
+
+        allPlayers =
+            cachedPlayers;
+
+
+        renderPlayers();
+
+
+        status.innerText =
+            `${allPlayers.length} players loaded`;
+
+
+        /*
+         * If cache is fresh,
+         * we still refresh in background,
+         * but user does not wait for it.
+         */
+
+    }
+
+
+    /*
+     * -------------------------------------------------
+     * STEP 3
+     * Fetch latest players
+     * -------------------------------------------------
+     */
 
     fetch(API_URL)
 
@@ -550,14 +941,17 @@ function loadPlayers() {
             if (!response.ok) {
 
                 throw new Error(
-                    "HTTP " + response.status
+                    "HTTP " +
+                    response.status
                 );
 
             }
 
+
             return response.json();
 
         })
+
 
         .then(data => {
 
@@ -571,86 +965,57 @@ function loadPlayers() {
             }
 
 
+            /*
+             * Store latest data
+             */
+
             allPlayers =
                 data.players || [];
 
 
-            document.getElementById(
-                "status"
-            ).innerText =
+            /*
+             * Save to browser cache
+             */
+
+            try {
+
+                localStorage.setItem(
+                    PLAYER_CACHE_KEY,
+                    JSON.stringify(
+                        allPlayers
+                    )
+                );
+
+
+                localStorage.setItem(
+                    PLAYER_CACHE_TIME_KEY,
+                    String(
+                        Date.now()
+                    )
+                );
+
+            } catch (error) {
+
+                console.log(
+                    "Cache save error:",
+                    error
+                );
+
+            }
+
+
+            /*
+             * Render latest players
+             */
+
+            renderPlayers();
+
+
+            status.innerText =
                 `${allPlayers.length} players loaded successfully`;
 
-
-            const teamA =
-                document.getElementById(
-                    "teamA"
-                );
-
-
-            const teamB =
-                document.getElementById(
-                    "teamB"
-                );
-
-
-            teamA.innerHTML = "";
-
-            teamB.innerHTML = "";
-
-
-            allPlayers.forEach(
-                player => {
-
-                    const div =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    div.className =
-                        "player";
-
-
-                    div.innerText =
-                        player.name;
-
-
-                    div.dataset.id =
-                        player.id;
-
-
-                    div.onclick =
-                        function() {
-
-                            togglePlayer(
-                                player.id,
-                                div
-                            );
-
-                        };
-
-
-                    if (
-                        player.team === "A"
-                    ) {
-
-                        teamA.appendChild(
-                            div
-                        );
-
-                    } else {
-
-                        teamB.appendChild(
-                            div
-                        );
-
-                    }
-
-                }
-            );
-
-
         })
+
 
         .catch(error => {
 
@@ -660,12 +1025,130 @@ function loadPlayers() {
             );
 
 
-            document.getElementById(
-                "status"
-            ).innerText =
-                "❌ Failed to load players";
+            /*
+             * If cached players
+             * are already displayed,
+             * don't show an error.
+             */
+
+            if (
+                allPlayers.length > 0
+            ) {
+
+                status.innerText =
+                    `${allPlayers.length} players loaded`;
+
+            } else {
+
+                status.innerText =
+                    "❌ Failed to load players";
+
+            }
 
         });
+
+}
+
+
+
+/* =====================================================
+   RENDER PLAYERS
+   ===================================================== */
+
+function renderPlayers() {
+
+    const teamA =
+        document.getElementById(
+            "teamA"
+        );
+
+
+    const teamB =
+        document.getElementById(
+            "teamB"
+        );
+
+
+    teamA.innerHTML = "";
+
+    teamB.innerHTML = "";
+
+
+    allPlayers.forEach(
+        player => {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.className =
+                "player";
+
+
+            div.innerText =
+                player.name;
+
+
+            div.dataset.id =
+                player.id;
+
+
+            /*
+             * Restore selected state
+             */
+
+            if (
+                selectedPlayers.some(
+                    selected =>
+                        selected.id ===
+                        player.id
+                )
+            ) {
+
+                div.classList.add(
+                    "selected"
+                );
+
+            }
+
+
+            div.onclick =
+                function() {
+
+                    togglePlayer(
+                        player.id,
+                        div
+                    );
+
+                };
+
+
+            if (
+                player.team === "A"
+            ) {
+
+                teamA.appendChild(
+                    div
+                );
+
+            } else {
+
+                teamB.appendChild(
+                    div
+                );
+
+            }
+
+        }
+    );
+
+
+    document.getElementById(
+        "selectedCount"
+    ).innerText =
+        selectedPlayers.length;
 
 }
 
@@ -683,17 +1166,28 @@ function togglePlayer(
     const index =
         selectedPlayers.findIndex(
             player =>
-                player.id === playerId
+                player.id ===
+                playerId
         );
 
 
-    if (index === -1) {
+    if (
+        index === -1
+    ) {
 
         const player =
             allPlayers.find(
                 player =>
-                    player.id === playerId
+                    player.id ===
+                    playerId
             );
+
+
+        if (!player) {
+
+            return;
+
+        }
 
 
         selectedPlayers.push(
@@ -832,7 +1326,7 @@ function shuffleTeams() {
 
 
 /* =====================================================
-   RENDER TEAMS
+   RENDER TEAM ASSIGNMENT
    ===================================================== */
 
 function renderAssignment() {
@@ -852,6 +1346,30 @@ function renderAssignment() {
     team1Container.innerHTML = "";
 
     team2Container.innerHTML = "";
+
+
+    if (
+        team1.length === 0
+    ) {
+
+        team1Container.innerHTML =
+            `<div class="empty-message">
+                Drop players here
+             </div>`;
+
+    }
+
+
+    if (
+        team2.length === 0
+    ) {
+
+        team2Container.innerHTML =
+            `<div class="empty-message">
+                Drop players here
+             </div>`;
+
+    }
 
 
     team1.forEach(
@@ -894,7 +1412,7 @@ function renderAssignment() {
 
 
 /* =====================================================
-   PLAYER CARD
+   CREATE PLAYER CARD
    ===================================================== */
 
 function createPlayerCard(
@@ -932,11 +1450,10 @@ function createPlayerCard(
                 player.id;
 
 
-            event.dataTransfer
-                .setData(
-                    "text/plain",
-                    player.id
-                );
+            event.dataTransfer.setData(
+                "text/plain",
+                player.id
+            );
 
 
             div.classList.add(
@@ -955,6 +1472,7 @@ function createPlayerCard(
                 "dragging"
             );
 
+
             draggedPlayerId =
                 null;
 
@@ -971,12 +1489,32 @@ function createPlayerCard(
 
 
 /* =====================================================
-   DESKTOP DROP
+   DESKTOP DRAG AND DROP
    ===================================================== */
 
 function allowDrop(event) {
 
     event.preventDefault();
+
+}
+
+
+function dragEnter(event) {
+
+    event.preventDefault();
+
+    event.currentTarget.classList.add(
+        "drag-over"
+    );
+
+}
+
+
+function dragLeave(event) {
+
+    event.currentTarget.classList.remove(
+        "drag-over"
+    );
 
 }
 
@@ -989,14 +1527,50 @@ function dropPlayer(
     event.preventDefault();
 
 
+    event.currentTarget.classList.remove(
+        "drag-over"
+    );
+
+
     const playerId =
-        event.dataTransfer
-            .getData(
-                "text/plain"
-            );
+        event.dataTransfer.getData(
+            "text/plain"
+        );
 
 
     if (!playerId) {
+
+        return;
+
+    }
+
+
+    movePlayerToTeam(
+        playerId,
+        targetTeam
+    );
+
+}
+
+
+
+/* =====================================================
+   MOVE PLAYER
+   ===================================================== */
+
+function movePlayerToTeam(
+    playerId,
+    targetTeam
+) {
+
+    const player =
+        allPlayers.find(
+            p =>
+                p.id === playerId
+        );
+
+
+    if (!player) {
 
         return;
 
@@ -1014,13 +1588,6 @@ function dropPlayer(
         team2.filter(
             p =>
                 p.id !== playerId
-        );
-
-
-    const player =
-        allPlayers.find(
-            p =>
-                p.id === playerId
         );
 
 
@@ -1048,7 +1615,7 @@ function dropPlayer(
 
 
 /* =====================================================
-   CREATE TEAMS
+   CREATE FINAL TEAMS
    ===================================================== */
 
 function finishTeams() {
@@ -1201,6 +1768,7 @@ function renderFinalTeams() {
                 `<div class="batting-number">
                     ${player.battingOrder}
                  </div>
+
                  <div>
                     ${player.name}
                  </div>`;
@@ -1231,6 +1799,7 @@ function renderFinalTeams() {
                 `<div class="batting-number">
                     ${player.battingOrder}
                  </div>
+
                  <div>
                     ${player.name}
                  </div>`;
@@ -1248,7 +1817,7 @@ function renderFinalTeams() {
 
 
 /* =====================================================
-   SAVE TO GOOGLE SHEETS
+   SAVE BATTING ORDERS
    ===================================================== */
 
 async function saveBattingOrders() {
@@ -1290,6 +1859,29 @@ async function saveBattingOrders() {
     );
 
 
+    if (
+        assignments.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    const message =
+        document.getElementById(
+            "saveMessage"
+        );
+
+
+    message.innerText =
+        "Saving batting orders...";
+
+
+    message.className =
+        "saved-message";
+
+
     try {
 
         const response =
@@ -1326,12 +1918,6 @@ async function saveBattingOrders() {
             await response.json();
 
 
-        const message =
-            document.getElementById(
-                "saveMessage"
-            );
-
-
         if (
             result.success
         ) {
@@ -1345,21 +1931,18 @@ async function saveBattingOrders() {
         } else {
 
             throw new Error(
-                result.error
+                result.error ||
+                "Unable to save batting orders."
             );
 
         }
 
-
     } catch (error) {
 
-        console.error(error);
-
-
-        const message =
-            document.getElementById(
-                "saveMessage"
-            );
+        console.error(
+            "Save error:",
+            error
+        );
 
 
         message.innerText =
@@ -1426,10 +2009,13 @@ function startAgain() {
     document.querySelectorAll(
         ".player"
     ).forEach(
-        element =>
+        element => {
+
             element.classList.remove(
                 "selected"
-            )
+            );
+
+        }
     );
 
 
@@ -1457,11 +2043,10 @@ function startAgain() {
 
 
 /* =====================================================
-   START APP
+   START APPLICATION
    ===================================================== */
 
 loadPlayers();
-
 
 </script>
 

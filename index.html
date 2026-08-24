@@ -778,11 +778,76 @@ async function loadPlayers() {
 
     try {
 
-        const response =
-            await fetch(API_URL);
+        const response = await fetch(API_URL, {
+            method: "GET",
+            redirect: "follow"
+        });
 
-        const data =
-            await response.json();
+        if (!response.ok) {
+            throw new Error(
+                "HTTP error: " + response.status
+            );
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+            throw new Error(
+                data.error || "Unable to load players"
+            );
+        }
+
+        allPlayers = data.players || [];
+
+        document.getElementById("status").innerText =
+            `${allPlayers.length} players loaded successfully`;
+
+        const teamA =
+            document.getElementById("teamA");
+
+        const teamB =
+            document.getElementById("teamB");
+
+        teamA.innerHTML = "";
+        teamB.innerHTML = "";
+
+        allPlayers.forEach(player => {
+
+            const div =
+                document.createElement("div");
+
+            div.className = "player";
+
+            div.innerText = player.name;
+
+            div.dataset.id = player.id;
+
+            div.onclick = function () {
+                togglePlayer(player.id, div);
+            };
+
+            if (player.team === "A") {
+                teamA.appendChild(div);
+            } else {
+                teamB.appendChild(div);
+            }
+
+        });
+
+        updateSelectedCount();
+
+    } catch (error) {
+
+        console.error(
+            "Player loading error:",
+            error
+        );
+
+        document.getElementById("status").innerText =
+            "❌ Failed to load players: " +
+            error.message;
+    }
+}
 
 
         if (!data.success) {

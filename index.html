@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Cricket Player Selection</title>
 
@@ -109,10 +113,7 @@
             padding: 20px;
             border-radius: 12px;
             min-height: 300px;
-
-            box-shadow:
-                0 2px 8px rgba(0,0,0,0.1);
-
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             transition: 0.2s;
         }
 
@@ -139,30 +140,18 @@
 
         .assigned-player {
             padding: 14px;
-
             margin: 8px 0;
-
             border-radius: 8px;
-
             background: #f1f1f1;
-
             text-align: center;
-
             cursor: grab;
-
             border: 1px solid #ddd;
-
             user-select: none;
-
             transition: 0.2s;
         }
 
         .assigned-player:hover {
             background: #e0e0e0;
-        }
-
-        .assigned-player:active {
-            cursor: grabbing;
         }
 
         .assigned-player.dragging {
@@ -175,6 +164,37 @@
             padding: 50px 10px;
             border: 2px dashed #ccc;
             border-radius: 8px;
+        }
+
+        .batting-list {
+            margin-top: 20px;
+        }
+
+        .batting-player {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            margin: 8px 0;
+            background: #f5f5f5;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .batting-number {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1976d2;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .team2-batting .batting-number {
+            background: #ff9800;
         }
 
         .button-area {
@@ -226,27 +246,45 @@
             background: #388e3c;
         }
 
+        .save {
+            background: #00897b;
+        }
+
+        .save:hover {
+            background: #00695c;
+        }
+
         .final-team {
             background: white;
             padding: 20px;
             border-radius: 12px;
             margin-top: 20px;
-
-            box-shadow:
-                0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .final-team h2 {
             text-align: center;
         }
 
-        .final-player {
-            padding: 12px;
-            margin: 8px 0;
-            background: #f5f5f5;
-            border-radius: 8px;
+        .saved-message {
             text-align: center;
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
             font-weight: bold;
+            display: none;
+        }
+
+        .saved-message.success-message {
+            display: block;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .saved-message.error-message {
+            display: block;
+            background: #ffebee;
+            color: #c62828;
         }
 
         @media (max-width: 600px) {
@@ -279,9 +317,12 @@
 
     <!-- SCREEN 1 -->
 
-    <div id="screen1" class="screen active">
+    <div id="screen1"
+         class="screen active">
 
-        <h1>🏏 Cricket Player Selection</h1>
+        <h1>
+            🏏 Cricket Player Selection
+        </h1>
 
         <div id="status">
             Loading players...
@@ -290,18 +331,24 @@
 
         <div class="team">
 
-            <h2>Team A</h2>
+            <h2>
+                Team A
+            </h2>
 
-            <div id="teamA" class="players"></div>
+            <div id="teamA"
+                 class="players"></div>
 
         </div>
 
 
         <div class="team">
 
-            <h2>Team B</h2>
+            <h2>
+                Team B
+            </h2>
 
-            <div id="teamB" class="players"></div>
+            <div id="teamB"
+                 class="players"></div>
 
         </div>
 
@@ -319,9 +366,8 @@
 
         <div class="button-area">
 
-            <button
-                class="primary"
-                onclick="goToAssignment()">
+            <button class="primary"
+                    onclick="goToAssignment()">
 
                 Continue
 
@@ -335,22 +381,24 @@
 
     <!-- SCREEN 2 -->
 
-    <div id="screen2" class="screen">
+    <div id="screen2"
+         class="screen">
 
-
-        <h1>🎲 Create Two Teams</h1>
+        <h1>
+            🎲 Create Two Teams
+        </h1>
 
 
         <div class="instruction">
 
-            First the selected players are shuffled
+            Selected players are shuffled
             automatically.
 
             <br><br>
 
             <strong>
-                Drag and drop players between Team 1
-                and Team 2.
+                Drag and drop players between
+                Team 1 and Team 2.
             </strong>
 
         </div>
@@ -375,95 +423,75 @@
         </div>
 
 
-
         <div class="assignment-area">
 
 
             <!-- TEAM 1 -->
 
-            <div
-                id="team1DropArea"
-                class="assignment-team team1"
-                ondragover="allowDrop(event)"
-                ondrop="dropPlayer(event, 1)"
-                ondragenter="dragEnter(event)"
-                ondragleave="dragLeave(event)"
-            >
+            <div id="team1DropArea"
+                 class="assignment-team team1"
+                 ondragover="allowDrop(event)"
+                 ondrop="dropPlayer(event, 1)"
+                 ondragenter="dragEnter(event)"
+                 ondragleave="dragLeave(event)">
 
                 <h2>
                     🔵 Team 1
                 </h2>
 
-                <div
-                    id="team1Players"
-                    class="drop-zone">
-
-                </div>
+                <div id="team1Players"
+                     class="drop-zone"></div>
 
             </div>
 
 
-
             <!-- TEAM 2 -->
 
-            <div
-                id="team2DropArea"
-                class="assignment-team team2"
-                ondragover="allowDrop(event)"
-                ondrop="dropPlayer(event, 2)"
-                ondragenter="dragEnter(event)"
-                ondragleave="dragLeave(event)"
-            >
+            <div id="team2DropArea"
+                 class="assignment-team team2"
+                 ondragover="allowDrop(event)"
+                 ondrop="dropPlayer(event, 2)"
+                 ondragenter="dragEnter(event)"
+                 ondragleave="dragLeave(event)">
 
                 <h2>
                     🟠 Team 2
                 </h2>
 
-                <div
-                    id="team2Players"
-                    class="drop-zone">
-
-                </div>
+                <div id="team2Players"
+                     class="drop-zone"></div>
 
             </div>
-
 
         </div>
 
 
-
         <div class="button-area">
 
-
-            <button
-                class="shuffle"
-                onclick="shuffleTeams()">
+            <button class="shuffle"
+                    onclick="shuffleTeams()">
 
                 🎲 Shuffle Again
 
             </button>
 
 
-            <button
-                class="secondary"
-                onclick="goBackToSelection()">
+            <button class="secondary"
+                    onclick="goBackToSelection()">
 
                 ← Back
 
             </button>
 
 
-            <button
-                class="success"
-                onclick="finishTeams()">
+            <button class="success"
+                    onclick="finishTeams()">
 
                 Create Teams
 
             </button>
 
-
         </div>
-
 
     </div>
 
@@ -471,12 +499,24 @@
 
     <!-- SCREEN 3 -->
 
-    <div id="screen3" class="screen">
-
+    <div id="screen3"
+         class="screen">
 
         <h1>
-            🏆 Final Teams
+            🏆 Batting Order
         </h1>
+
+
+        <div class="instruction">
+
+            A random batting order has been
+            generated for both teams.
+
+            <br>
+
+            Numbers are unique within each team.
+
+        </div>
 
 
         <div class="final-team">
@@ -485,7 +525,8 @@
                 🔵 Team 1
             </h2>
 
-            <div id="finalTeam1"></div>
+            <div id="finalTeam1"
+                 class="batting-list"></div>
 
         </div>
 
@@ -496,34 +537,50 @@
                 🟠 Team 2
             </h2>
 
-            <div id="finalTeam2"></div>
+            <div id="finalTeam2"
+                 class="batting-list team2-batting"></div>
 
         </div>
 
 
+        <div id="saveMessage"
+             class="saved-message"></div>
+
+
         <div class="button-area">
 
-
-            <button
-                class="secondary"
-                onclick="goBackToAssignment()">
+            <button class="secondary"
+                    onclick="goBackToAssignment()">
 
                 ← Modify Teams
 
             </button>
 
 
-            <button
-                class="primary"
-                onclick="startAgain()">
+            <button class="shuffle"
+                    onclick="generateBattingOrders()">
+
+                🎲 Regenerate Orders
+
+            </button>
+
+
+            <button class="save"
+                    onclick="saveBattingOrders()">
+
+                💾 Save Batting Orders
+
+            </button>
+
+
+            <button class="primary"
+                    onclick="startAgain()">
 
                 Start Again
 
             </button>
 
-
         </div>
-
 
     </div>
 
@@ -535,9 +592,17 @@
 <script>
 
 
+/* =====================================================
+   API URL
+   ===================================================== */
+
 const API_URL =
 "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnQDKhsU35eReJfpy09N4OxRXdemyHQxAIcIIEkC8vVSgOuXP1QBEkOgrOtzsHE5avlQNQqCUWWUTXylbWBYj3V0m1_Suhia1ghb1AxvWIhxHJ7ZW3k8qQTcV_Te64TldzlxBLiLwdDXuuUOtxSABymZmGSpEIKH77ZRTp1cMz0tIv7ns96vkGDE1ZSTMWG2dcCmvHEJUNRnREbAlWr1n0H36gL1XNInOMYONf6aELqkbrJF2Rb18NKeS7fRbg1kNqGHLGVrHblFztJ5YeGZdbR830FS_w&lib=MR8tRzo_3YwvEnMJAOT5QmwS7g1xLMLOv";
 
+
+/* =====================================================
+   DATA
+   ===================================================== */
 
 let allPlayers = [];
 
@@ -550,9 +615,9 @@ let team2 = [];
 let draggedPlayerId = null;
 
 
-
-/* LOAD PLAYERS */
-
+/* =====================================================
+   LOAD PLAYERS
+   ===================================================== */
 
 async function loadPlayers() {
 
@@ -668,9 +733,9 @@ async function loadPlayers() {
 }
 
 
-
-/* SELECT PLAYERS */
-
+/* =====================================================
+   PLAYER SELECTION
+   ===================================================== */
 
 function togglePlayer(
     playerId,
@@ -722,9 +787,9 @@ function togglePlayer(
 }
 
 
-
-/* COUNT */
-
+/* =====================================================
+   SELECTED COUNT
+   ===================================================== */
 
 function updateSelectedCount() {
 
@@ -736,9 +801,9 @@ function updateSelectedCount() {
 }
 
 
-
-/* GO TO TEAM CREATION */
-
+/* =====================================================
+   GO TO TEAM CREATION
+   ===================================================== */
 
 function goToAssignment() {
 
@@ -774,9 +839,9 @@ function goToAssignment() {
 }
 
 
-
-/* SHUFFLE */
-
+/* =====================================================
+   SHUFFLE TEAMS
+   ===================================================== */
 
 function shuffleTeams() {
 
@@ -841,9 +906,9 @@ function shuffleTeams() {
 }
 
 
-
-/* RENDER TEAMS */
-
+/* =====================================================
+   RENDER TEAMS
+   ===================================================== */
 
 function renderAssignment() {
 
@@ -926,9 +991,9 @@ function renderAssignment() {
 }
 
 
-
-/* CREATE DRAGGABLE PLAYER CARD */
-
+/* =====================================================
+   CREATE DRAGGABLE PLAYER
+   ===================================================== */
 
 function createPlayerCard(
     player,
@@ -997,9 +1062,9 @@ function createPlayerCard(
 }
 
 
-
-/* ALLOW DROP */
-
+/* =====================================================
+   DRAG & DROP
+   ===================================================== */
 
 function allowDrop(event) {
 
@@ -1008,45 +1073,27 @@ function allowDrop(event) {
 }
 
 
-
-/* DRAG ENTER */
-
-
 function dragEnter(event) {
 
     event.preventDefault();
 
 
-    const dropArea =
-        event.currentTarget;
-
-
-    dropArea.classList.add(
-        "drag-over"
-    );
+    event.currentTarget
+        .classList.add(
+            "drag-over"
+        );
 
 }
-
-
-
-/* DRAG LEAVE */
 
 
 function dragLeave(event) {
 
-    const dropArea =
-        event.currentTarget;
-
-
-    dropArea.classList.remove(
-        "drag-over"
-    );
+    event.currentTarget
+        .classList.remove(
+            "drag-over"
+        );
 
 }
-
-
-
-/* DROP PLAYER */
 
 
 function dropPlayer(
@@ -1057,19 +1104,17 @@ function dropPlayer(
     event.preventDefault();
 
 
-    const dropArea =
-        event.currentTarget;
-
-
-    dropArea.classList.remove(
-        "drag-over"
-    );
+    event.currentTarget
+        .classList.remove(
+            "drag-over"
+        );
 
 
     const playerId =
-        event.dataTransfer.getData(
-            "text/plain"
-        );
+        event.dataTransfer
+            .getData(
+                "text/plain"
+            );
 
 
     if (!playerId) {
@@ -1093,11 +1138,6 @@ function dropPlayer(
     }
 
 
-    /*
-       Remove player from
-       both teams first.
-    */
-
     team1 =
         team1.filter(
             p =>
@@ -1111,11 +1151,6 @@ function dropPlayer(
                 p.id !== playerId
         );
 
-
-    /*
-       Add player to
-       selected target team.
-    */
 
     if (
         targetTeam === 1
@@ -1139,9 +1174,9 @@ function dropPlayer(
 }
 
 
-
-/* FINISH TEAMS */
-
+/* =====================================================
+   CREATE FINAL TEAMS
+   ===================================================== */
 
 function finishTeams() {
 
@@ -1173,14 +1208,110 @@ function finishTeams() {
     );
 
 
-    renderFinalTeams();
+    /*
+       Automatically generate
+       random batting orders.
+    */
+
+    generateBattingOrders();
 
 }
 
 
+/* =====================================================
+   RANDOM BATTING ORDERS
+   ===================================================== */
 
-/* FINAL TEAMS */
+function generateBattingOrders() {
 
+    team1 =
+        assignRandomBattingOrder(
+            team1
+        );
+
+
+    team2 =
+        assignRandomBattingOrder(
+            team2
+        );
+
+
+    renderFinalTeams();
+
+
+    showMessage(
+        "",
+        ""
+    );
+
+}
+
+
+/* =====================================================
+   ASSIGN RANDOM ORDER
+   ===================================================== */
+
+function assignRandomBattingOrder(
+    team
+) {
+
+    const shuffled =
+        [...team];
+
+
+    /*
+       Fisher-Yates shuffle
+    */
+
+    for (
+        let i =
+            shuffled.length - 1;
+
+        i > 0;
+
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() *
+                (i + 1)
+            );
+
+
+        [
+            shuffled[i],
+            shuffled[j]
+        ] =
+        [
+            shuffled[j],
+            shuffled[i]
+        ];
+
+    }
+
+
+    /*
+       Assign 1, 2, 3...
+    */
+
+    return shuffled.map(
+        (player, index) => ({
+
+            ...player,
+
+            battingOrder:
+                index + 1
+
+        })
+    );
+
+}
+
+
+/* =====================================================
+   DISPLAY FINAL TEAMS
+   ===================================================== */
 
 function renderFinalTeams() {
 
@@ -1202,7 +1333,7 @@ function renderFinalTeams() {
 
 
     team1.forEach(
-        (player, index) => {
+        player => {
 
             const div =
                 document.createElement(
@@ -1211,11 +1342,18 @@ function renderFinalTeams() {
 
 
             div.className =
-                "final-player";
+                "batting-player";
 
 
-            div.innerText =
-                `${index + 1}. ${player.name}`;
+            div.innerHTML =
+
+                `<div class="batting-number">
+                    ${player.battingOrder}
+                 </div>
+
+                 <div>
+                    ${player.name}
+                 </div>`;
 
 
             finalTeam1.appendChild(
@@ -1227,7 +1365,7 @@ function renderFinalTeams() {
 
 
     team2.forEach(
-        (player, index) => {
+        player => {
 
             const div =
                 document.createElement(
@@ -1236,11 +1374,18 @@ function renderFinalTeams() {
 
 
             div.className =
-                "final-player";
+                "batting-player";
 
 
-            div.innerText =
-                `${index + 1}. ${player.name}`;
+            div.innerHTML =
+
+                `<div class="batting-number">
+                    ${player.battingOrder}
+                 </div>
+
+                 <div>
+                    ${player.name}
+                 </div>`;
 
 
             finalTeam2.appendChild(
@@ -1253,9 +1398,187 @@ function renderFinalTeams() {
 }
 
 
+/* =====================================================
+   SAVE BATTING ORDERS
+   ===================================================== */
 
-/* BACK TO SELECTION */
+async function saveBattingOrders() {
 
+    const assignments = [];
+
+
+    team1.forEach(
+        player => {
+
+            assignments.push({
+
+                id:
+                    player.id,
+
+                battingOrder:
+                    player.battingOrder
+
+            });
+
+        }
+    );
+
+
+    team2.forEach(
+        player => {
+
+            assignments.push({
+
+                id:
+                    player.id,
+
+                battingOrder:
+                    player.battingOrder
+
+            });
+
+        }
+    );
+
+
+    if (
+        assignments.length === 0
+    ) {
+
+        showMessage(
+            "No players to save.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    showMessage(
+        "Saving batting orders...",
+        "success"
+    );
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            action:
+                                "confirm",
+
+                            assignments:
+                                assignments
+
+                        })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            result.success
+        ) {
+
+            showMessage(
+                "✅ Batting orders saved successfully to Google Sheets.",
+                "success"
+            );
+
+        } else {
+
+            throw new Error(
+                result.error ||
+                "Unable to save batting orders."
+            );
+
+        }
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        showMessage(
+            "❌ Failed to save batting orders: " +
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   MESSAGE
+   ===================================================== */
+
+function showMessage(
+    message,
+    type
+) {
+
+    const element =
+        document.getElementById(
+            "saveMessage"
+        );
+
+
+    element.innerText =
+        message;
+
+
+    element.className =
+        "saved-message";
+
+
+    if (
+        type === "success"
+    ) {
+
+        element.classList.add(
+            "success-message"
+        );
+
+    }
+
+
+    if (
+        type === "error"
+    ) {
+
+        element.classList.add(
+            "error-message"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   BACK
+   ===================================================== */
 
 function goBackToSelection() {
 
@@ -1273,10 +1596,6 @@ function goBackToSelection() {
     );
 
 }
-
-
-
-/* BACK TO ASSIGNMENT */
 
 
 function goBackToAssignment() {
@@ -1297,9 +1616,9 @@ function goBackToAssignment() {
 }
 
 
-
-/* START AGAIN */
-
+/* =====================================================
+   START AGAIN
+   ===================================================== */
 
 function startAgain() {
 
@@ -1339,9 +1658,9 @@ function startAgain() {
 }
 
 
-
-/* START APPLICATION */
-
+/* =====================================================
+   START APP
+   ===================================================== */
 
 loadPlayers();
 
@@ -1349,4 +1668,5 @@ loadPlayers();
 
 
 </body>
+
 </html>

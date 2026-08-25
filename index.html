@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Cricket Team & Batting Order</title>
+  <title>Cricket Player Selection</title>
 
   <style>
     * {
@@ -13,20 +12,20 @@
     }
 
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
       margin: 0;
       padding: 15px;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
     }
 
     .container {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: auto;
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 10px;
+      margin: 10px 0 5px;
     }
 
     h2 {
@@ -43,140 +42,130 @@
 
     #status {
       text-align: center;
+      min-height: 24px;
+      margin: 10px 0 20px;
       font-weight: bold;
-      min-height: 25px;
-      margin: 15px 0;
     }
 
-    .card,
-    .team-box,
-    .batting-team {
-      background: white;
-      border-radius: 12px;
+    .card {
+      background: #fff;
       padding: 18px;
-      margin-top: 18px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.1);
+      margin-bottom: 20px;
     }
 
     .players-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 12px;
     }
 
-    .player {
-      padding: 14px 10px;
-      border: 1px solid #d0d0d0;
-      border-radius: 8px;
-      background: #fafafa;
-      text-align: center;
-      cursor: pointer;
-      user-select: none;
-      -webkit-user-select: none;
-      transition: 0.15s;
-    }
-
-    .player:hover {
-      transform: translateY(-1px);
-    }
-
-    .player:active {
-      transform: scale(0.98);
-    }
-
-    .player.selected {
-      background: #4caf50;
-      color: white;
-      border-color: #4caf50;
-    }
-
-    .team-setup-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 18px;
-      margin-top: 18px;
-    }
-
-    .team-box {
-      margin-top: 0;
-      min-height: 300px;
-      transition: 0.2s;
-    }
-
-    .team-box.drag-over {
-      box-shadow: 0 0 0 3px #4caf50 inset;
-    }
-
-    .team-box h2 {
-      text-align: center;
-    }
-
-    .unassigned-box h2 {
-      color: #666;
-    }
-
-    .team1-box h2 {
-      color: #1976d2;
-    }
-
-    .team2-box h2 {
-      color: #f57c00;
-    }
-
-    .team-list {
-      min-height: 200px;
-    }
-
-    .team-player {
-      padding: 14px;
-      margin: 8px 0;
-      background: #f1f1f1;
+    .player-card {
       border: 1px solid #ddd;
-      border-radius: 8px;
-      cursor: grab;
-      user-select: none;
-      -webkit-user-select: none;
-      transition: 0.15s;
+      border-radius: 10px;
+      padding: 12px;
+      background: #fafafa;
     }
 
-    .team-player.dragging {
-      opacity: 0.4;
-    }
-
-    .team-player-name {
+    .player-name {
       font-weight: bold;
       text-align: center;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      word-break: break-word;
+    }
+
+    .player-team {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      min-height: 20px;
+      margin: 4px 0 8px;
     }
 
     .player-actions {
-      display: none;
-      margin-top: 12px;
-      gap: 8px;
+      display: flex;
+      gap: 6px;
+    }
+
+    button {
+      border: none;
+      border-radius: 7px;
+      padding: 11px 15px;
+      color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    button:active {
+      transform: scale(.98);
     }
 
     .player-actions button {
       flex: 1;
-      padding: 10px 8px;
+      padding: 10px 5px;
       font-size: 13px;
     }
 
-    .empty-message {
-      border: 2px dashed #ccc;
-      border-radius: 8px;
-      padding: 30px 10px;
-      text-align: center;
-      color: #888;
-      margin-top: 10px;
+    .team1-btn {
+      background: #1976d2;
     }
 
-    .team-counts {
+    .team2-btn {
+      background: #f57c00;
+    }
+
+    .remove-btn {
+      background: #777;
+      width: 100%;
+      margin-top: 6px;
+      font-size: 12px;
+      padding: 8px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .team-summary {
+      background: #fff;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.1);
+      min-height: 180px;
+    }
+
+    .team1-summary {
+      border-top: 5px solid #1976d2;
+    }
+
+    .team2-summary {
+      border-top: 5px solid #f57c00;
+    }
+
+    .summary-player {
+      background: #f5f5f5;
+      padding: 10px;
+      margin: 7px 0;
+      border-radius: 7px;
+    }
+
+    .empty {
+      color: #888;
       text-align: center;
-      background: white;
-      padding: 15px;
-      margin-top: 18px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      font-size: 17px;
+      padding: 25px 5px;
+    }
+
+    .count {
+      text-align: center;
+      font-weight: bold;
+      margin: 8px 0 12px;
     }
 
     .button-area {
@@ -185,24 +174,6 @@
       gap: 12px;
       flex-wrap: wrap;
       margin: 25px 0;
-    }
-
-    button {
-      border: none;
-      border-radius: 8px;
-      padding: 14px 24px;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      touch-action: manipulation;
-    }
-
-    button:hover {
-      opacity: 0.95;
-    }
-
-    button:active {
-      transform: scale(0.98);
     }
 
     .primary {
@@ -225,18 +196,6 @@
       background: #00897b;
     }
 
-    .move-unassigned {
-      background: #757575;
-    }
-
-    .move-team1 {
-      background: #1976d2;
-    }
-
-    .move-team2 {
-      background: #f57c00;
-    }
-
     .batting-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -244,18 +203,20 @@
     }
 
     .batting-team {
-      margin-top: 0;
+      background: white;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.1);
     }
 
     .batting-player {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 12px;
-      margin: 8px 0;
       background: #f5f5f5;
       border-radius: 8px;
-      font-weight: bold;
+      padding: 10px;
+      margin: 8px 0;
     }
 
     .batting-number {
@@ -268,6 +229,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      font-weight: bold;
     }
 
     .team2-order .batting-number {
@@ -276,8 +238,9 @@
 
     #saveMessage {
       text-align: center;
-      margin-top: 18px;
       font-weight: bold;
+      margin: 15px 0;
+      min-height: 25px;
     }
 
     .success-message {
@@ -288,21 +251,17 @@
       color: #c62828;
     }
 
-
     /* PIN MODAL */
 
     .modal {
       display: none;
       position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
       z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.55);
+      padding: 20px;
       align-items: center;
       justify-content: center;
-      padding: 20px;
     }
 
     .modal.show {
@@ -316,31 +275,16 @@
       border-radius: 14px;
       padding: 25px;
       text-align: center;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.25);
-    }
-
-    .modal-content h2 {
-      margin-bottom: 10px;
-    }
-
-    .modal-content p {
-      color: #666;
-      margin-bottom: 18px;
     }
 
     #pinInput {
       width: 100%;
-      padding: 15px;
+      padding: 14px;
       font-size: 24px;
       text-align: center;
       letter-spacing: 8px;
       border: 2px solid #ddd;
       border-radius: 8px;
-      outline: none;
-    }
-
-    #pinInput:focus {
-      border-color: #1976d2;
     }
 
     .pin-error {
@@ -353,24 +297,22 @@
     .modal-buttons {
       display: flex;
       gap: 10px;
-      margin-top: 20px;
+      margin-top: 18px;
     }
 
     .modal-buttons button {
       flex: 1;
     }
 
-
     /* MOBILE */
 
-    @media (max-width: 800px) {
-
+    @media (max-width: 700px) {
       body {
         padding: 8px;
       }
 
       h1 {
-        font-size: 24px;
+        font-size: 23px;
       }
 
       .players-grid {
@@ -378,42 +320,22 @@
         gap: 8px;
       }
 
-      .player {
+      .player-card {
+        padding: 9px;
+      }
+
+      .player-name {
         font-size: 14px;
-        padding: 13px 6px;
+        min-height: 38px;
       }
 
-      .team-setup-grid {
+      .player-actions button {
+        font-size: 11px;
+        padding: 10px 3px;
+      }
+
+      .summary {
         grid-template-columns: 1fr;
-        gap: 14px;
-      }
-
-      .team-box {
-        min-height: auto;
-        padding: 14px;
-      }
-
-      .team-list {
-        min-height: 0;
-      }
-
-      .team-player {
-        padding: 14px;
-        cursor: default;
-        touch-action: manipulation;
-      }
-
-      .player-actions {
-        display: flex;
-      }
-
-      .team-player-name {
-        font-size: 16px;
-      }
-
-      .team-counts {
-        font-size: 15px;
-        line-height: 1.8;
       }
 
       .batting-grid {
@@ -427,11 +349,6 @@
       .button-area button {
         width: 100%;
       }
-
-      .batting-player {
-        padding: 14px;
-      }
-
     }
 
   </style>
@@ -441,107 +358,57 @@
 
 <div class="container">
 
-  <!-- ================= SCREEN 1 ================= -->
+  <!-- SCREEN 1 -->
 
   <div id="screen1" class="screen active">
 
-    <h1>🏏 Create Cricket Teams</h1>
+    <h1>🏏 Create Teams</h1>
 
     <div id="status">Loading players...</div>
 
     <div class="card">
 
-      <h2>All Players</h2>
+      <h2>Assign Players</h2>
 
       <div id="allPlayers" class="players-grid"></div>
 
     </div>
 
+    <div class="summary">
 
-    <div class="team-setup-grid">
-
-      <!-- UNASSIGNED -->
-
-      <div id="unassignedDropArea"
-           class="team-box unassigned-box"
-           ondragover="allowDrop(event)"
-           ondrop="dropPlayer(event, 'unassigned')"
-           ondragenter="dragEnter(event)"
-           ondragleave="dragLeave(event)">
-
-        <h2>⏳ Unassigned</h2>
-
-        <div id="unassignedPlayers" class="team-list"></div>
-
-      </div>
-
-
-      <!-- TEAM 1 -->
-
-      <div id="team1DropArea"
-           class="team-box team1-box"
-           ondragover="allowDrop(event)"
-           ondrop="dropPlayer(event, 'team1')"
-           ondragenter="dragEnter(event)"
-           ondragleave="dragLeave(event)">
+      <div class="team-summary team1-summary">
 
         <h2>🔵 Team 1</h2>
 
-        <div id="team1Players" class="team-list"></div>
+        <div class="count">
+          Players: <span id="team1Count">0</span>
+        </div>
+
+        <div id="team1Summary"></div>
 
       </div>
 
-
-      <!-- TEAM 2 -->
-
-      <div id="team2DropArea"
-           class="team-box team2-box"
-           ondragover="allowDrop(event)"
-           ondrop="dropPlayer(event, 'team2')"
-           ondragenter="dragEnter(event)"
-           ondragleave="dragLeave(event)">
+      <div class="team-summary team2-summary">
 
         <h2>🟠 Team 2</h2>
 
-        <div id="team2Players" class="team-list"></div>
+        <div class="count">
+          Players: <span id="team2Count">0</span>
+        </div>
+
+        <div id="team2Summary"></div>
 
       </div>
 
     </div>
 
-
-    <div class="team-counts">
-
-      Selected:
-      <strong id="selectedCount">0</strong>
-
-      &nbsp; | &nbsp;
-
-      Unassigned:
-      <strong id="unassignedCount">0</strong>
-
-      &nbsp; | &nbsp;
-
-      Team 1:
-      <strong id="team1Count">0</strong>
-
-      &nbsp; | &nbsp;
-
-      Team 2:
-      <strong id="team2Count">0</strong>
-
-    </div>
-
-
     <div class="button-area">
 
-      <button class="secondary"
-              onclick="clearSelection()">
-        Clear Selection
+      <button class="secondary" onclick="clearTeams()">
+        Clear Teams
       </button>
 
-      <button class="success"
-              onclick="assignBattingOrder()">
+      <button class="success" onclick="goToBattingOrder()">
         Assign Batting Order →
       </button>
 
@@ -550,7 +417,7 @@
   </div>
 
 
-  <!-- ================= SCREEN 2 ================= -->
+  <!-- SCREEN 2 -->
 
   <div id="screen2" class="screen">
 
@@ -566,41 +433,33 @@
 
       </div>
 
-
       <div class="batting-team">
 
         <h2>🟠 Team 2</h2>
 
-        <div id="battingTeam2"
-             class="team2-order"></div>
+        <div id="battingTeam2" class="team2-order"></div>
 
       </div>
 
     </div>
 
-
     <div id="saveMessage"></div>
-
 
     <div class="button-area">
 
-      <button class="secondary"
-              onclick="changeTeams()">
+      <button class="secondary" onclick="changeTeams()">
         ← Change Teams
       </button>
 
-      <button class="shuffle"
-              onclick="generateBattingOrders()">
-        🎲 Regenerate Batting Order
+      <button class="shuffle" onclick="generateBattingOrders()">
+        🎲 Regenerate
       </button>
 
-      <button class="save"
-              onclick="openPinModal()">
+      <button class="save" onclick="openPinModal()">
         💾 Save Batting Orders
       </button>
 
-      <button class="primary"
-              onclick="startAgain()">
+      <button class="primary" onclick="startAgain()">
         Start Again
       </button>
 
@@ -611,7 +470,7 @@
 </div>
 
 
-<!-- ================= PIN MODAL ================= -->
+<!-- PIN MODAL -->
 
 <div id="pinModal" class="modal">
 
@@ -619,9 +478,7 @@
 
     <h2>🔐 Enter PIN</h2>
 
-    <p>
-      Enter the 4-digit PIN to save the batting orders.
-    </p>
+    <p>Enter the 4-digit PIN to save.</p>
 
     <input
       type="password"
@@ -629,22 +486,17 @@
       inputmode="numeric"
       maxlength="4"
       placeholder="••••"
-      autocomplete="off"
     >
 
-    <div id="pinError"
-         class="pin-error"></div>
-
+    <div id="pinError" class="pin-error"></div>
 
     <div class="modal-buttons">
 
-      <button class="secondary"
-              onclick="closePinModal()">
+      <button class="secondary" onclick="closePinModal()">
         Cancel
       </button>
 
-      <button class="save"
-              onclick="verifyPinAndSave()">
+      <button class="save" onclick="verifyPinAndSave()">
         Save
       </button>
 
@@ -657,71 +509,45 @@
 
 <script>
 
-/* =========================================
-   CONFIGURATION
-   ========================================= */
-
 const API_URL =
 "https://script.google.com/macros/s/AKfycbzLpnsEmypbynjiTA9jFVkvbw8YyALOe7q3boFgBNk-djd7xmPfWgIdRfDnh_C0L_yX/exec";
 
 const SAVE_PIN = "7777";
 
-const PLAYER_CACHE_KEY =
-"cricketPlayers";
-
-
-/* =========================================
-   VARIABLES
-   ========================================= */
+const CACHE_KEY = "cricketPlayers";
 
 let allPlayers = [];
-
-let selectedPlayers = [];
-
-let unassignedPlayers = [];
-
 let team1 = [];
-
 let team2 = [];
 
 
-/* =========================================
-   LOAD PLAYERS
-   ========================================= */
+/* LOAD PLAYERS */
 
 function loadPlayers() {
 
-  const status =
-    document.getElementById("status");
-
-  let cachedPlayers = null;
+  const status = document.getElementById("status");
 
   try {
 
-    const cached =
-      localStorage.getItem(PLAYER_CACHE_KEY);
+    const cached = localStorage.getItem(CACHE_KEY);
 
     if (cached) {
-      cachedPlayers = JSON.parse(cached);
+
+      allPlayers = JSON.parse(cached);
+
+      if (allPlayers.length > 0) {
+
+        renderPlayers();
+
+        status.innerText =
+          `${allPlayers.length} players loaded`;
+
+      }
+
     }
 
   } catch (error) {
-    console.log("Cache error:", error);
-  }
-
-
-  if (
-    Array.isArray(cachedPlayers) &&
-    cachedPlayers.length > 0
-  ) {
-
-    allPlayers = cachedPlayers;
-
-    renderAllPlayers();
-
-    status.innerText =
-      `${allPlayers.length} players loaded`;
-
+    console.log("Cache error", error);
   }
 
 
@@ -730,9 +556,7 @@ function loadPlayers() {
     .then(response => {
 
       if (!response.ok) {
-        throw new Error(
-          "HTTP " + response.status
-        );
+        throw new Error("HTTP " + response.status);
       }
 
       return response.json();
@@ -742,36 +566,17 @@ function loadPlayers() {
     .then(data => {
 
       if (!data.success) {
-
-        throw new Error(
-          data.error ||
-          "Unable to load players"
-        );
-
+        throw new Error(data.error || "Failed to load players");
       }
 
-      allPlayers =
-        data.players || [];
+      allPlayers = data.players || [];
 
+      localStorage.setItem(
+        CACHE_KEY,
+        JSON.stringify(allPlayers)
+      );
 
-      try {
-
-        localStorage.setItem(
-          PLAYER_CACHE_KEY,
-          JSON.stringify(allPlayers)
-        );
-
-      } catch (error) {
-
-        console.log(
-          "Cache save error:",
-          error
-        );
-
-      }
-
-
-      renderAllPlayers();
+      renderPlayers();
 
       status.innerText =
         `${allPlayers.length} players loaded`;
@@ -780,17 +585,9 @@ function loadPlayers() {
 
     .catch(error => {
 
-      console.error(
-        "Load error:",
-        error
-      );
+      console.error(error);
 
-      if (allPlayers.length > 0) {
-
-        status.innerText =
-          `${allPlayers.length} players loaded`;
-
-      } else {
+      if (allPlayers.length === 0) {
 
         status.innerText =
           "❌ Failed to load players";
@@ -802,11 +599,9 @@ function loadPlayers() {
 }
 
 
-/* =========================================
-   RENDER ALL PLAYERS
-   ========================================= */
+/* RENDER PLAYER CARDS */
 
-function renderAllPlayers() {
+function renderPlayers() {
 
   const container =
     document.getElementById("allPlayers");
@@ -816,491 +611,189 @@ function renderAllPlayers() {
 
   allPlayers.forEach(player => {
 
-    const div =
+    const card =
       document.createElement("div");
 
-    div.className = "player";
-
-    div.innerText = player.name;
+    card.className = "player-card";
 
 
-    if (
-      selectedPlayers.some(
-        p => p.id === player.id
-      )
-    ) {
+    let currentTeam = "";
 
-      div.classList.add("selected");
+    if (team1.some(p => p.id === player.id)) {
+      currentTeam = "🔵 Team 1";
+    }
 
+    if (team2.some(p => p.id === player.id)) {
+      currentTeam = "🟠 Team 2";
     }
 
 
-    div.onclick = function() {
+    card.innerHTML = `
 
-      togglePlayerSelection(
-        player.id
-      );
+      <div class="player-name">
+        ${escapeHtml(player.name)}
+      </div>
 
-    };
+      <div class="player-team">
+        ${currentTeam || "Not assigned"}
+      </div>
+
+      <div class="player-actions">
+
+        <button
+          class="team1-btn"
+          onclick="assignPlayer('${player.id}', 'team1')"
+        >
+          🔵 Team 1
+        </button>
+
+        <button
+          class="team2-btn"
+          onclick="assignPlayer('${player.id}', 'team2')"
+        >
+          🟠 Team 2
+        </button>
+
+      </div>
+
+      ${
+        currentTeam
+          ? `
+            <button
+              class="remove-btn"
+              onclick="removePlayer('${player.id}')"
+            >
+              Remove
+            </button>
+          `
+          : ""
+      }
+
+    `;
 
 
-    container.appendChild(div);
+    container.appendChild(card);
 
   });
 
 
-  updateCounts();
+  renderTeamSummary();
 
 }
 
 
-/* =========================================
-   SELECT PLAYER
-   ========================================= */
+/* ASSIGN PLAYER */
 
-function togglePlayerSelection(playerId) {
+function assignPlayer(playerId, targetTeam) {
 
   const player =
-    allPlayers.find(
-      p => p.id === playerId
-    );
+    allPlayers.find(p => p.id === playerId);
 
   if (!player) return;
 
-
-  const selectedIndex =
-    selectedPlayers.findIndex(
-      p => p.id === playerId
-    );
-
-
-  if (selectedIndex === -1) {
-
-    selectedPlayers.push(player);
-
-    unassignedPlayers.push(player);
-
-  } else {
-
-    selectedPlayers =
-      selectedPlayers.filter(
-        p => p.id !== playerId
-      );
-
-    unassignedPlayers =
-      unassignedPlayers.filter(
-        p => p.id !== playerId
-      );
-
-    team1 =
-      team1.filter(
-        p => p.id !== playerId
-      );
-
-    team2 =
-      team2.filter(
-        p => p.id !== playerId
-      );
-
-  }
-
-
-  renderAllPlayers();
-
-  renderTeamSetup();
-
-}
-
-
-/* =========================================
-   RENDER TEAMS
-   ========================================= */
-
-function renderTeamSetup() {
-
-  renderPlayerList(
-    "unassignedPlayers",
-    unassignedPlayers,
-    "unassigned"
-  );
-
-  renderPlayerList(
-    "team1Players",
-    team1,
-    "team1"
-  );
-
-  renderPlayerList(
-    "team2Players",
-    team2,
-    "team2"
-  );
-
-  updateCounts();
-
-}
-
-
-/* =========================================
-   RENDER PLAYER LIST
-   ========================================= */
-
-function renderPlayerList(
-  containerId,
-  players,
-  currentTeam
-) {
-
-  const container =
-    document.getElementById(containerId);
-
-  container.innerHTML = "";
-
-
-  if (players.length === 0) {
-
-    container.innerHTML =
-      `<div class="empty-message">
-        No players
-      </div>`;
-
-    return;
-
-  }
-
-
-  players.forEach(player => {
-
-    const div =
-      document.createElement("div");
-
-    div.className =
-      "team-player";
-
-    div.draggable = true;
-
-    div.dataset.id =
-      player.id;
-
-
-    /* PLAYER NAME */
-
-    const name =
-      document.createElement("div");
-
-    name.className =
-      "team-player-name";
-
-    name.innerText =
-      player.name;
-
-
-    div.appendChild(name);
-
-
-    /* MOBILE ACTION BUTTONS */
-
-    const actions =
-      document.createElement("div");
-
-    actions.className =
-      "player-actions";
-
-
-    if (
-      currentTeam === "unassigned"
-    ) {
-
-      actions.innerHTML =
-        `<button class="move-team1"
-                 onclick="movePlayer('${player.id}', 'team1')">
-          🔵 Team 1
-        </button>
-
-        <button class="move-team2"
-                 onclick="movePlayer('${player.id}', 'team2')">
-          🟠 Team 2
-        </button>`;
-
-    }
-
-
-    if (
-      currentTeam === "team1"
-    ) {
-
-      actions.innerHTML =
-        `<button class="move-unassigned"
-                 onclick="movePlayer('${player.id}', 'unassigned')">
-          ← Remove
-        </button>
-
-        <button class="move-team2"
-                 onclick="movePlayer('${player.id}', 'team2')">
-          🟠 Team 2
-        </button>`;
-
-    }
-
-
-    if (
-      currentTeam === "team2"
-    ) {
-
-      actions.innerHTML =
-        `<button class="move-unassigned"
-                 onclick="movePlayer('${player.id}', 'unassigned')">
-          ← Remove
-        </button>
-
-        <button class="move-team1"
-                 onclick="movePlayer('${player.id}', 'team1')">
-          🔵 Team 1
-        </button>`;
-
-    }
-
-
-    div.appendChild(actions);
-
-
-    /* DRAG START */
-
-    div.addEventListener(
-      "dragstart",
-      function(event) {
-
-        event.dataTransfer.setData(
-          "text/plain",
-          player.id
-        );
-
-        div.classList.add(
-          "dragging"
-        );
-
-      }
-    );
-
-
-    /* DRAG END */
-
-    div.addEventListener(
-      "dragend",
-      function() {
-
-        div.classList.remove(
-          "dragging"
-        );
-
-      }
-    );
-
-
-    container.appendChild(div);
-
-  });
-
-}
-
-
-/* =========================================
-   DRAG AND DROP
-   ========================================= */
-
-function allowDrop(event) {
-
-  event.preventDefault();
-
-}
-
-
-function dragEnter(event) {
-
-  event.preventDefault();
-
-  event.currentTarget.classList.add(
-    "drag-over"
-  );
-
-}
-
-
-function dragLeave(event) {
-
-  event.currentTarget.classList.remove(
-    "drag-over"
-  );
-
-}
-
-
-function dropPlayer(event, target) {
-
-  event.preventDefault();
-
-  event.currentTarget.classList.remove(
-    "drag-over"
-  );
-
-
-  const playerId =
-    event.dataTransfer.getData(
-      "text/plain"
-    );
-
-
-  movePlayer(
-    playerId,
-    target
-  );
-
-}
-
-
-/* =========================================
-   MOVE PLAYER
-   ========================================= */
-
-function movePlayer(
-  playerId,
-  target
-) {
-
-  const player =
-    selectedPlayers.find(
-      p => p.id === playerId
-    );
-
-  if (!player) return;
-
-
-  unassignedPlayers =
-    unassignedPlayers.filter(
-      p => p.id !== playerId
-    );
 
   team1 =
-    team1.filter(
-      p => p.id !== playerId
-    );
+    team1.filter(p => p.id !== playerId);
 
   team2 =
-    team2.filter(
-      p => p.id !== playerId
-    );
+    team2.filter(p => p.id !== playerId);
 
 
-  if (
-    target === "unassigned"
-  ) {
-
-    unassignedPlayers.push(player);
-
-  }
-
-
-  if (
-    target === "team1"
-  ) {
+  if (targetTeam === "team1") {
 
     team1.push(player);
 
-  }
-
-
-  if (
-    target === "team2"
-  ) {
+  } else {
 
     team2.push(player);
 
   }
 
 
-  renderTeamSetup();
+  renderPlayers();
 
 }
 
 
-/* =========================================
-   UPDATE COUNTS
-   ========================================= */
+/* REMOVE PLAYER */
 
-function updateCounts() {
+function removePlayer(playerId) {
 
-  document.getElementById(
-    "selectedCount"
-  ).innerText =
-    selectedPlayers.length;
+  team1 =
+    team1.filter(p => p.id !== playerId);
 
+  team2 =
+    team2.filter(p => p.id !== playerId);
 
-  document.getElementById(
-    "unassignedCount"
-  ).innerText =
-    unassignedPlayers.length;
+  renderPlayers();
+
+}
 
 
-  document.getElementById(
-    "team1Count"
-  ).innerText =
+/* TEAM SUMMARY */
+
+function renderTeamSummary() {
+
+  document.getElementById("team1Count").innerText =
     team1.length;
 
-
-  document.getElementById(
-    "team2Count"
-  ).innerText =
+  document.getElementById("team2Count").innerText =
     team2.length;
 
+
+  const team1Container =
+    document.getElementById("team1Summary");
+
+  const team2Container =
+    document.getElementById("team2Summary");
+
+
+  team1Container.innerHTML =
+    team1.length === 0
+      ? `<div class="empty">No players assigned</div>`
+      : team1.map(player =>
+          `<div class="summary-player">
+            ${escapeHtml(player.name)}
+          </div>`
+        ).join("");
+
+
+  team2Container.innerHTML =
+    team2.length === 0
+      ? `<div class="empty">No players assigned</div>`
+      : team2.map(player =>
+          `<div class="summary-player">
+            ${escapeHtml(player.name)}
+          </div>`
+        ).join("");
+
 }
 
 
-/* =========================================
-   CLEAR SELECTION
-   ========================================= */
+/* CLEAR TEAMS */
 
-function clearSelection() {
+function clearTeams() {
 
-  if (
-    !confirm(
-      "Clear all selected players and teams?"
-    )
-  ) {
-
+  if (!confirm("Clear both teams?")) {
     return;
-
   }
-
-
-  selectedPlayers = [];
-
-  unassignedPlayers = [];
 
   team1 = [];
-
   team2 = [];
 
-
-  renderAllPlayers();
-
-  renderTeamSetup();
+  renderPlayers();
 
 }
 
 
-/* =========================================
-   ASSIGN BATTING ORDER
-   ========================================= */
+/* GO TO BATTING ORDER */
 
-function assignBattingOrder() {
+function goToBattingOrder() {
 
-  if (
-    team1.length === 0 ||
-    team2.length === 0
-  ) {
+  if (team1.length === 0 || team2.length === 0) {
 
     alert(
-      "Please add at least one player to both teams."
+      "Please assign at least one player to each team."
     );
 
     return;
@@ -1308,31 +801,11 @@ function assignBattingOrder() {
   }
 
 
-  if (
-    unassignedPlayers.length > 0
-  ) {
+  document.getElementById("screen1")
+    .classList.remove("active");
 
-    alert(
-      "Please assign all selected players to Team 1 or Team 2 before continuing."
-    );
-
-    return;
-
-  }
-
-
-  document.getElementById(
-    "screen1"
-  ).classList.remove(
-    "active"
-  );
-
-
-  document.getElementById(
-    "screen2"
-  ).classList.add(
-    "active"
-  );
+  document.getElementById("screen2")
+    .classList.add("active");
 
 
   generateBattingOrders();
@@ -1340,172 +813,142 @@ function assignBattingOrder() {
 }
 
 
-/* =========================================
-   GENERATE BATTING ORDERS
-   ========================================= */
+/* GENERATE RANDOM ORDERS */
 
 function generateBattingOrders() {
 
-  team1 =
-    randomizeTeam(team1);
-
-  team2 =
-    randomizeTeam(team2);
-
+  team1 = generateOrder(team1);
+  team2 = generateOrder(team2);
 
   renderBattingOrders();
 
 }
 
 
-function randomizeTeam(team) {
+function generateOrder(team) {
 
-  const shuffled =
-    [...team];
+  const shuffled = [...team];
 
 
   for (
-    let i =
-      shuffled.length - 1;
-
+    let i = shuffled.length - 1;
     i > 0;
-
     i--
   ) {
 
     const j =
-      Math.floor(
-        Math.random() * (i + 1)
-      );
+      Math.floor(Math.random() * (i + 1));
 
-
-    [
-      shuffled[i],
-      shuffled[j]
-    ] =
-    [
-      shuffled[j],
-      shuffled[i]
-    ];
+    [shuffled[i], shuffled[j]] =
+      [shuffled[j], shuffled[i]];
 
   }
 
 
   return shuffled.map(
     (player, index) => ({
-
       ...player,
-
-      battingOrder:
-        index + 1
-
+      battingOrder: index + 1
     })
   );
 
 }
 
 
-/* =========================================
-   DISPLAY BATTING ORDERS
-   ========================================= */
+/* DISPLAY BATTING ORDER */
 
 function renderBattingOrders() {
 
   const team1Container =
-    document.getElementById(
-      "battingTeam1"
-    );
+    document.getElementById("battingTeam1");
 
   const team2Container =
-    document.getElementById(
-      "battingTeam2"
-    );
+    document.getElementById("battingTeam2");
 
 
-  team1Container.innerHTML = "";
+  team1Container.innerHTML =
+    team1.map(player => `
 
-  team2Container.innerHTML = "";
+      <div class="batting-player">
 
+        <div class="batting-number">
+          ${player.battingOrder}
+        </div>
 
-  team1.forEach(player => {
+        <div>
+          ${escapeHtml(player.name)}
+        </div>
 
-    const div =
-      document.createElement("div");
-
-    div.className =
-      "batting-player";
-
-
-    div.innerHTML =
-      `<div class="batting-number">
-        ${player.battingOrder}
       </div>
 
-      <div>
-        ${player.name}
-      </div>`;
+    `).join("");
 
 
-    team1Container.appendChild(div);
+  team2Container.innerHTML =
+    team2.map(player => `
 
-  });
+      <div class="batting-player">
 
+        <div class="batting-number">
+          ${player.battingOrder}
+        </div>
 
-  team2.forEach(player => {
+        <div>
+          ${escapeHtml(player.name)}
+        </div>
 
-    const div =
-      document.createElement("div");
-
-    div.className =
-      "batting-player";
-
-
-    div.innerHTML =
-      `<div class="batting-number">
-        ${player.battingOrder}
       </div>
 
-      <div>
-        ${player.name}
-      </div>`;
-
-
-    team2Container.appendChild(div);
-
-  });
+    `).join("");
 
 }
 
 
-/* =========================================
-   PIN MODAL
-   ========================================= */
+/* CHANGE TEAMS */
+
+function changeTeams() {
+
+  document.getElementById("screen2")
+    .classList.remove("active");
+
+  document.getElementById("screen1")
+    .classList.add("active");
+
+}
+
+
+/* START AGAIN */
+
+function startAgain() {
+
+  team1 = [];
+  team2 = [];
+
+  document.getElementById("saveMessage").innerText = "";
+
+  document.getElementById("screen2")
+    .classList.remove("active");
+
+  document.getElementById("screen1")
+    .classList.add("active");
+
+  renderPlayers();
+
+}
+
+
+/* PIN MODAL */
 
 function openPinModal() {
 
-  document.getElementById(
-    "pinInput"
-  ).value = "";
+  document.getElementById("pinInput").value = "";
+  document.getElementById("pinError").innerText = "";
 
+  document.getElementById("pinModal")
+    .classList.add("show");
 
-  document.getElementById(
-    "pinError"
-  ).innerText = "";
-
-
-  document.getElementById(
-    "pinModal"
-  ).classList.add(
-    "show"
-  );
-
-
-  setTimeout(function() {
-
-    document.getElementById(
-      "pinInput"
-    ).focus();
-
+  setTimeout(() => {
+    document.getElementById("pinInput").focus();
   }, 100);
 
 }
@@ -1513,56 +956,30 @@ function openPinModal() {
 
 function closePinModal() {
 
-  document.getElementById(
-    "pinModal"
-  ).classList.remove(
-    "show"
-  );
+  document.getElementById("pinModal")
+    .classList.remove("show");
 
 }
 
 
-/* =========================================
-   VERIFY PIN
-   ========================================= */
+/* VERIFY PIN */
 
 function verifyPinAndSave() {
 
-  const enteredPin =
-    document.getElementById(
-      "pinInput"
-    ).value.trim();
+  const pin =
+    document.getElementById("pinInput")
+      .value.trim();
+
+  const error =
+    document.getElementById("pinError");
 
 
-  const errorElement =
-    document.getElementById(
-      "pinError"
-    );
+  if (pin !== SAVE_PIN) {
 
+    error.innerText =
+      "❌ Incorrect PIN";
 
-  if (
-    enteredPin.length !== 4
-  ) {
-
-    errorElement.innerText =
-      "Please enter a 4-digit PIN.";
-
-    return;
-
-  }
-
-
-  if (
-    enteredPin !== SAVE_PIN
-  ) {
-
-    errorElement.innerText =
-      "❌ Incorrect PIN.";
-
-
-    document.getElementById(
-      "pinInput"
-    ).value = "";
+    document.getElementById("pinInput").value = "";
 
     return;
 
@@ -1576,49 +993,27 @@ function verifyPinAndSave() {
 }
 
 
-/* =========================================
-   SAVE BATTING ORDERS
-   ========================================= */
+/* SAVE TO GOOGLE SHEETS */
 
 async function saveBattingOrders() {
 
-  const assignments = [];
-
-
-  team1.forEach(player => {
-
-    assignments.push({
-
-      id:
-        player.id,
-
-      battingOrder:
-        player.battingOrder
-
-    });
-
-  });
-
-
-  team2.forEach(player => {
-
-    assignments.push({
-
-      id:
-        player.id,
-
-      battingOrder:
-        player.battingOrder
-
-    });
-
-  });
-
-
   const message =
-    document.getElementById(
-      "saveMessage"
-    );
+    document.getElementById("saveMessage");
+
+
+  const assignments = [
+
+    ...team1.map(player => ({
+      id: player.id,
+      battingOrder: player.battingOrder
+    })),
+
+    ...team2.map(player => ({
+      id: player.id,
+      battingOrder: player.battingOrder
+    }))
+
+  ];
 
 
   message.innerText =
@@ -1630,65 +1025,74 @@ async function saveBattingOrders() {
   try {
 
     const response =
-      await fetch(
-        API_URL,
-        {
+      await fetch(API_URL, {
 
-          method:
-            "POST",
+        method: "POST",
 
-          headers: {
+        headers: {
+          "Content-Type":
+            "text/plain;charset=utf-8"
+        },
 
-            "Content-Type":
-              "text/plain;charset=utf-8"
+        body: JSON.stringify({
 
-          },
+          action: "confirm",
 
-          body:
-            JSON.stringify({
+          assignments: assignments
 
-              action:
-                "confirm",
+        })
 
-              assignments:
-                assignments
-
-            })
-
-        }
-      );
+      });
 
 
     const result =
       await response.json();
 
 
-    if (
-      result.success
-    ) {
-
-      message.innerText =
-        "✅ Batting orders saved successfully.";
-
-      message.className =
-        "success-message";
-
-    } else {
+    if (!result.success) {
 
       throw new Error(
-        result.error ||
-        "Save failed."
+        result.error || "Save failed"
       );
 
     }
 
-  } catch (error) {
 
-    console.error(
-      "Save error:",
-      error
+    message.innerText =
+      "✅ Batting orders saved successfully.";
+
+    message.className =
+      "success-message";
+
+
+    /* UPDATE LAST ORDER IN MEMORY */
+
+    assignments.forEach(assignment => {
+
+      const player =
+        allPlayers.find(
+          p => p.id === assignment.id
+        );
+
+      if (player) {
+
+        player.lastOrder =
+          assignment.battingOrder;
+
+      }
+
+    });
+
+
+    localStorage.setItem(
+      CACHE_KEY,
+      JSON.stringify(allPlayers)
     );
 
+
+  } catch (error) {
+
+    console.error(error);
 
     message.innerText =
       "❌ Failed to save batting orders.";
@@ -1701,72 +1105,21 @@ async function saveBattingOrders() {
 }
 
 
-/* =========================================
-   CHANGE TEAMS
-   ========================================= */
+/* SAFELY DISPLAY PLAYER NAMES */
 
-function changeTeams() {
+function escapeHtml(value) {
 
-  document.getElementById(
-    "screen2"
-  ).classList.remove(
-    "active"
-  );
-
-
-  document.getElementById(
-    "screen1"
-  ).classList.add(
-    "active"
-  );
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 
 }
 
 
-/* =========================================
-   START AGAIN
-   ========================================= */
-
-function startAgain() {
-
-  selectedPlayers = [];
-
-  unassignedPlayers = [];
-
-  team1 = [];
-
-  team2 = [];
-
-
-  document.getElementById(
-    "saveMessage"
-  ).innerHTML = "";
-
-
-  document.getElementById(
-    "screen2"
-  ).classList.remove(
-    "active"
-  );
-
-
-  document.getElementById(
-    "screen1"
-  ).classList.add(
-    "active"
-  );
-
-
-  renderAllPlayers();
-
-  renderTeamSetup();
-
-}
-
-
-/* =========================================
-   START APPLICATION
-   ========================================= */
+/* START */
 
 loadPlayers();
 

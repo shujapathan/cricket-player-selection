@@ -7,6 +7,7 @@
   <title>Cricket Player Selection</title>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -236,6 +237,12 @@
       background: #f57c00;
     }
 
+    .last-order {
+      margin-left: auto;
+      font-size: 12px;
+      color: #777;
+    }
+
     #saveMessage {
       text-align: center;
       font-weight: bold;
@@ -249,6 +256,10 @@
 
     .error-message {
       color: #c62828;
+    }
+
+    .info-message {
+      color: #1976d2;
     }
 
     /* PIN MODAL */
@@ -307,6 +318,7 @@
     /* MOBILE */
 
     @media (max-width: 700px) {
+
       body {
         padding: 8px;
       }
@@ -349,6 +361,11 @@
       .button-area button {
         width: 100%;
       }
+
+      .last-order {
+        font-size: 10px;
+      }
+
     }
 
   </style>
@@ -358,42 +375,66 @@
 
 <div class="container">
 
-  <!-- SCREEN 1 -->
+
+  <!-- =====================================
+       SCREEN 1
+       ===================================== -->
 
   <div id="screen1" class="screen active">
 
     <h1>🏏 Create Teams</h1>
 
-    <div id="status">Loading players...</div>
+    <div id="status">
+      Loading players...
+    </div>
 
     <div class="card">
 
       <h2>Assign Players</h2>
 
-      <div id="allPlayers" class="players-grid"></div>
+      <div id="allPlayers"
+           class="players-grid">
+      </div>
 
     </div>
 
+
     <div class="summary">
+
+
+      <!-- TEAM 1 -->
 
       <div class="team-summary team1-summary">
 
         <h2>🔵 Team 1</h2>
 
         <div class="count">
-          Players: <span id="team1Count">0</span>
+
+          Players:
+          <span id="team1Count">
+            0
+          </span>
+
         </div>
 
         <div id="team1Summary"></div>
 
       </div>
 
+
+      <!-- TEAM 2 -->
+
       <div class="team-summary team2-summary">
 
         <h2>🟠 Team 2</h2>
 
         <div class="count">
-          Players: <span id="team2Count">0</span>
+
+          Players:
+          <span id="team2Count">
+            0
+          </span>
+
         </div>
 
         <div id="team2Summary"></div>
@@ -402,14 +443,24 @@
 
     </div>
 
+
     <div class="button-area">
 
-      <button class="secondary" onclick="clearTeams()">
+      <button
+        class="secondary"
+        onclick="clearTeams()">
+
         Clear Teams
+
       </button>
 
-      <button class="success" onclick="goToBattingOrder()">
+
+      <button
+        class="success"
+        onclick="goToBattingOrder()">
+
         Assign Batting Order →
+
       </button>
 
     </div>
@@ -417,13 +468,27 @@
   </div>
 
 
-  <!-- SCREEN 2 -->
+
+  <!-- =====================================
+       SCREEN 2
+       ===================================== -->
 
   <div id="screen2" class="screen">
 
     <h1>🏆 Batting Order</h1>
 
+
+    <div
+      id="generationInfo"
+      class="info-message"
+      style="text-align:center;margin-bottom:15px;">
+    </div>
+
+
     <div class="batting-grid">
+
+
+      <!-- TEAM 1 -->
 
       <div class="batting-team">
 
@@ -433,34 +498,62 @@
 
       </div>
 
+
+      <!-- TEAM 2 -->
+
       <div class="batting-team">
 
         <h2>🟠 Team 2</h2>
 
-        <div id="battingTeam2" class="team2-order"></div>
+        <div
+          id="battingTeam2"
+          class="team2-order">
+        </div>
 
       </div>
 
     </div>
 
+
     <div id="saveMessage"></div>
+
 
     <div class="button-area">
 
-      <button class="secondary" onclick="changeTeams()">
+
+      <button
+        class="secondary"
+        onclick="changeTeams()">
+
         ← Change Teams
+
       </button>
 
-      <button class="shuffle" onclick="generateBattingOrders()">
+
+      <button
+        class="shuffle"
+        onclick="generateBattingOrders()">
+
         🎲 Regenerate
+
       </button>
 
-      <button class="save" onclick="openPinModal()">
+
+      <button
+        class="save"
+        onclick="openPinModal()">
+
         💾 Save Batting Orders
+
       </button>
 
-      <button class="primary" onclick="startAgain()">
+
+      <button
+        class="primary"
+        onclick="startAgain()">
+
         Start Again
+
       </button>
 
     </div>
@@ -470,15 +563,23 @@
 </div>
 
 
-<!-- PIN MODAL -->
 
-<div id="pinModal" class="modal">
+<!-- =====================================
+     PIN MODAL
+     ===================================== -->
+
+<div
+  id="pinModal"
+  class="modal">
 
   <div class="modal-content">
 
     <h2>🔐 Enter PIN</h2>
 
-    <p>Enter the 4-digit PIN to save.</p>
+    <p>
+      Enter the 4-digit PIN to save.
+    </p>
+
 
     <input
       type="password"
@@ -486,18 +587,32 @@
       inputmode="numeric"
       maxlength="4"
       placeholder="••••"
-    >
+      autocomplete="off">
 
-    <div id="pinError" class="pin-error"></div>
+
+    <div
+      id="pinError"
+      class="pin-error">
+    </div>
+
 
     <div class="modal-buttons">
 
-      <button class="secondary" onclick="closePinModal()">
+      <button
+        class="secondary"
+        onclick="closePinModal()">
+
         Cancel
+
       </button>
 
-      <button class="save" onclick="verifyPinAndSave()">
+
+      <button
+        class="save"
+        onclick="verifyPinAndSave()">
+
         Save
+
       </button>
 
     </div>
@@ -507,35 +622,68 @@
 </div>
 
 
+
 <script>
+
+
+/* =========================================
+   CONFIGURATION
+   ========================================= */
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbzLpnsEmypbynjiTA9jFVkvbw8YyALOe7q3boFgBNk-djd7xmPfWgIdRfDnh_C0L_yX/exec";
 
+
 const SAVE_PIN = "7777";
 
-const CACHE_KEY = "cricketPlayers";
+
+const CACHE_KEY =
+"cricketPlayers";
+
+
+/* =========================================
+   VARIABLES
+   ========================================= */
 
 let allPlayers = [];
+
 let team1 = [];
+
 let team2 = [];
 
 
-/* LOAD PLAYERS */
+/* =========================================
+   LOAD PLAYERS
+   ========================================= */
 
 function loadPlayers() {
 
-  const status = document.getElementById("status");
+  const status =
+    document.getElementById("status");
+
+
+  /*
+     First use cached data so the UI
+     appears immediately.
+  */
 
   try {
 
-    const cached = localStorage.getItem(CACHE_KEY);
+    const cached =
+      localStorage.getItem(
+        CACHE_KEY
+      );
+
 
     if (cached) {
 
-      allPlayers = JSON.parse(cached);
+      allPlayers =
+        JSON.parse(cached);
 
-      if (allPlayers.length > 0) {
+
+      if (
+        allPlayers.length > 0
+      ) {
 
         renderPlayers();
 
@@ -547,47 +695,97 @@ function loadPlayers() {
     }
 
   } catch (error) {
-    console.log("Cache error", error);
+
+    console.log(
+      "Cache error:",
+      error
+    );
+
   }
 
+
+  /*
+     Then get latest data from
+     Google Apps Script.
+  */
 
   fetch(API_URL)
 
     .then(response => {
 
       if (!response.ok) {
-        throw new Error("HTTP " + response.status);
+
+        throw new Error(
+          "HTTP " +
+          response.status
+        );
+
       }
 
       return response.json();
 
     })
 
+
     .then(data => {
 
       if (!data.success) {
-        throw new Error(data.error || "Failed to load players");
+
+        throw new Error(
+          data.error ||
+          "Failed to load players"
+        );
+
       }
 
-      allPlayers = data.players || [];
 
-      localStorage.setItem(
-        CACHE_KEY,
-        JSON.stringify(allPlayers)
-      );
+      allPlayers =
+        data.players || [];
+
+
+      /*
+         Save latest data locally.
+      */
+
+      try {
+
+        localStorage.setItem(
+          CACHE_KEY,
+          JSON.stringify(
+            allPlayers
+          )
+        );
+
+      } catch (error) {
+
+        console.log(
+          "Cache save error:",
+          error
+        );
+
+      }
+
 
       renderPlayers();
+
 
       status.innerText =
         `${allPlayers.length} players loaded`;
 
     })
 
+
     .catch(error => {
 
-      console.error(error);
+      console.error(
+        "Load error:",
+        error
+      );
 
-      if (allPlayers.length === 0) {
+
+      if (
+        allPlayers.length === 0
+      ) {
 
         status.innerText =
           "❌ Failed to load players";
@@ -599,82 +797,140 @@ function loadPlayers() {
 }
 
 
-/* RENDER PLAYER CARDS */
+/* =========================================
+   RENDER PLAYER CARDS
+   ========================================= */
 
 function renderPlayers() {
 
   const container =
-    document.getElementById("allPlayers");
+    document.getElementById(
+      "allPlayers"
+    );
+
 
   container.innerHTML = "";
 
 
-  allPlayers.forEach(player => {
-
-    const card =
-      document.createElement("div");
-
-    card.className = "player-card";
+  allPlayers.forEach(
+    player => {
 
 
-    let currentTeam = "";
-
-    if (team1.some(p => p.id === player.id)) {
-      currentTeam = "🔵 Team 1";
-    }
-
-    if (team2.some(p => p.id === player.id)) {
-      currentTeam = "🟠 Team 2";
-    }
+      let currentTeam = "";
 
 
-    card.innerHTML = `
+      if (
+        team1.some(
+          p =>
+            p.id === player.id
+        )
+      ) {
 
-      <div class="player-name">
-        ${escapeHtml(player.name)}
-      </div>
+        currentTeam =
+          "🔵 Team 1";
 
-      <div class="player-team">
-        ${currentTeam || "Not assigned"}
-      </div>
-
-      <div class="player-actions">
-
-        <button
-          class="team1-btn"
-          onclick="assignPlayer('${player.id}', 'team1')"
-        >
-          🔵 Team 1
-        </button>
-
-        <button
-          class="team2-btn"
-          onclick="assignPlayer('${player.id}', 'team2')"
-        >
-          🟠 Team 2
-        </button>
-
-      </div>
-
-      ${
-        currentTeam
-          ? `
-            <button
-              class="remove-btn"
-              onclick="removePlayer('${player.id}')"
-            >
-              Remove
-            </button>
-          `
-          : ""
       }
 
-    `;
+
+      if (
+        team2.some(
+          p =>
+            p.id === player.id
+        )
+      ) {
+
+        currentTeam =
+          "🟠 Team 2";
+
+      }
 
 
-    container.appendChild(card);
+      const card =
+        document.createElement(
+          "div"
+        );
 
-  });
+
+      card.className =
+        "player-card";
+
+
+      card.innerHTML = `
+
+        <div class="player-name">
+
+          ${escapeHtml(
+            player.name
+          )}
+
+        </div>
+
+
+        <div class="player-team">
+
+          ${
+            currentTeam ||
+            "Not assigned"
+          }
+
+        </div>
+
+
+        <div class="player-actions">
+
+          <button
+            class="team1-btn"
+            onclick="assignPlayer(
+              '${player.id}',
+              'team1'
+            )">
+
+            🔵 Team 1
+
+          </button>
+
+
+          <button
+            class="team2-btn"
+            onclick="assignPlayer(
+              '${player.id}',
+              'team2'
+            )">
+
+            🟠 Team 2
+
+          </button>
+
+        </div>
+
+
+        ${
+          currentTeam
+            ? `
+
+              <button
+                class="remove-btn"
+                onclick="removePlayer(
+                  '${player.id}'
+                )">
+
+                Remove
+
+              </button>
+
+            `
+            : ""
+        }
+
+      `;
+
+
+      container.appendChild(
+        card
+      );
+
+    }
+  );
 
 
   renderTeamSummary();
@@ -682,30 +938,63 @@ function renderPlayers() {
 }
 
 
-/* ASSIGN PLAYER */
+/* =========================================
+   ASSIGN PLAYER
+   ========================================= */
 
-function assignPlayer(playerId, targetTeam) {
+function assignPlayer(
+  playerId,
+  targetTeam
+) {
 
   const player =
-    allPlayers.find(p => p.id === playerId);
+    allPlayers.find(
+      p =>
+        p.id === playerId
+    );
 
-  if (!player) return;
 
+  if (!player) {
+    return;
+  }
+
+
+  /*
+     Remove player from both
+     teams first.
+  */
 
   team1 =
-    team1.filter(p => p.id !== playerId);
+    team1.filter(
+      p =>
+        p.id !== playerId
+    );
+
 
   team2 =
-    team2.filter(p => p.id !== playerId);
+    team2.filter(
+      p =>
+        p.id !== playerId
+    );
 
 
-  if (targetTeam === "team1") {
+  /*
+     Add to selected team.
+  */
 
-    team1.push(player);
+  if (
+    targetTeam === "team1"
+  ) {
+
+    team1.push(
+      player
+    );
 
   } else {
 
-    team2.push(player);
+    team2.push(
+      player
+    );
 
   }
 
@@ -715,82 +1004,136 @@ function assignPlayer(playerId, targetTeam) {
 }
 
 
-/* REMOVE PLAYER */
+/* =========================================
+   REMOVE PLAYER
+   ========================================= */
 
-function removePlayer(playerId) {
+function removePlayer(
+  playerId
+) {
 
   team1 =
-    team1.filter(p => p.id !== playerId);
+    team1.filter(
+      p =>
+        p.id !== playerId
+    );
+
 
   team2 =
-    team2.filter(p => p.id !== playerId);
+    team2.filter(
+      p =>
+        p.id !== playerId
+    );
+
 
   renderPlayers();
 
 }
 
 
-/* TEAM SUMMARY */
+/* =========================================
+   TEAM SUMMARY
+   ========================================= */
 
 function renderTeamSummary() {
 
-  document.getElementById("team1Count").innerText =
+  document.getElementById(
+    "team1Count"
+  ).innerText =
     team1.length;
 
-  document.getElementById("team2Count").innerText =
+
+  document.getElementById(
+    "team2Count"
+  ).innerText =
     team2.length;
 
 
   const team1Container =
-    document.getElementById("team1Summary");
+    document.getElementById(
+      "team1Summary"
+    );
+
 
   const team2Container =
-    document.getElementById("team2Summary");
+    document.getElementById(
+      "team2Summary"
+    );
 
 
   team1Container.innerHTML =
     team1.length === 0
-      ? `<div class="empty">No players assigned</div>`
-      : team1.map(player =>
-          `<div class="summary-player">
-            ${escapeHtml(player.name)}
-          </div>`
+
+      ? `<div class="empty">
+           No players assigned
+         </div>`
+
+      : team1.map(
+          player =>
+            `<div class="summary-player">
+              ${escapeHtml(
+                player.name
+              )}
+            </div>`
         ).join("");
 
 
   team2Container.innerHTML =
     team2.length === 0
-      ? `<div class="empty">No players assigned</div>`
-      : team2.map(player =>
-          `<div class="summary-player">
-            ${escapeHtml(player.name)}
-          </div>`
+
+      ? `<div class="empty">
+           No players assigned
+         </div>`
+
+      : team2.map(
+          player =>
+            `<div class="summary-player">
+              ${escapeHtml(
+                player.name
+              )}
+            </div>`
         ).join("");
 
 }
 
 
-/* CLEAR TEAMS */
+/* =========================================
+   CLEAR TEAMS
+   ========================================= */
 
 function clearTeams() {
 
-  if (!confirm("Clear both teams?")) {
+  if (
+    !confirm(
+      "Clear both teams?"
+    )
+  ) {
+
     return;
+
   }
 
+
   team1 = [];
+
   team2 = [];
+
 
   renderPlayers();
 
 }
 
 
-/* GO TO BATTING ORDER */
+/* =========================================
+   GO TO BATTING ORDER
+   ========================================= */
 
 function goToBattingOrder() {
 
-  if (team1.length === 0 || team2.length === 0) {
+  if (
+    team1.length === 0 ||
+    team2.length === 0
+  ) {
 
     alert(
       "Please assign at least one player to each team."
@@ -801,11 +1144,18 @@ function goToBattingOrder() {
   }
 
 
-  document.getElementById("screen1")
-    .classList.remove("active");
+  document.getElementById(
+    "screen1"
+  ).classList.remove(
+    "active"
+  );
 
-  document.getElementById("screen2")
-    .classList.add("active");
+
+  document.getElementById(
+    "screen2"
+  ).classList.add(
+    "active"
+  );
 
 
   generateBattingOrders();
@@ -813,173 +1163,550 @@ function goToBattingOrder() {
 }
 
 
-/* GENERATE RANDOM ORDERS */
+/* =========================================
+   GENERATE BATTING ORDERS
+   ========================================= */
 
 function generateBattingOrders() {
 
-  team1 = generateOrder(team1);
-  team2 = generateOrder(team2);
+  /*
+     Generate each team separately.
+
+     The algorithm ensures that,
+     whenever possible, a player does
+     NOT receive the same number as
+     their previous saved order.
+  */
+
+  team1 =
+    generateTeamOrder(
+      team1
+    );
+
+
+  team2 =
+    generateTeamOrder(
+      team2
+    );
+
 
   renderBattingOrders();
+
+
+  const info =
+    document.getElementById(
+      "generationInfo"
+    );
+
+
+  info.innerText =
+    "🎲 New batting orders generated. Previous saved orders are avoided where possible.";
 
 }
 
 
-function generateOrder(team) {
+/* =========================================
+   GENERATE TEAM ORDER
+   ========================================= */
 
-  const shuffled = [...team];
+function generateTeamOrder(
+  team
+) {
 
-
-  for (
-    let i = shuffled.length - 1;
-    i > 0;
-    i--
+  if (
+    team.length <= 1
   ) {
 
-    const j =
-      Math.floor(Math.random() * (i + 1));
+    return team.map(
+      (player, index) => ({
 
-    [shuffled[i], shuffled[j]] =
-      [shuffled[j], shuffled[i]];
+        ...player,
+
+        battingOrder:
+          index + 1
+
+      })
+    );
 
   }
 
 
-  return shuffled.map(
+  /*
+     Try multiple random arrangements.
+  */
+
+  for (
+    let attempt = 0;
+    attempt < 500;
+    attempt++
+  ) {
+
+    const shuffled =
+      shuffleArray(
+        [...team]
+      );
+
+
+    let valid = true;
+
+
+    /*
+       Check whether any player
+       received their previous order.
+    */
+
+    for (
+      let i = 0;
+      i < shuffled.length;
+      i++
+    ) {
+
+      const previousOrder =
+        Number(
+          shuffled[i].lastOrder
+        );
+
+
+      const newOrder =
+        i + 1;
+
+
+      if (
+        Number.isFinite(
+          previousOrder
+        ) &&
+        previousOrder === newOrder
+      ) {
+
+        valid = false;
+
+        break;
+
+      }
+
+    }
+
+
+    if (valid) {
+
+      return shuffled.map(
+        (player, index) => ({
+
+          ...player,
+
+          battingOrder:
+            index + 1
+
+        })
+      );
+
+    }
+
+  }
+
+
+  /*
+     If no perfect arrangement
+     was found after 500 attempts,
+     use a deterministic fallback
+     that tries to swap conflicting
+     players.
+  */
+
+  return createFallbackOrder(
+    team
+  );
+
+}
+
+
+/* =========================================
+   RANDOM SHUFFLE
+   ========================================= */
+
+function shuffleArray(
+  array
+) {
+
+  for (
+    let i =
+      array.length - 1;
+
+    i > 0;
+
+    i--
+  ) {
+
+    const j =
+      Math.floor(
+        Math.random() *
+        (i + 1)
+      );
+
+
+    [
+      array[i],
+      array[j]
+    ] =
+    [
+      array[j],
+      array[i]
+    ];
+
+  }
+
+
+  return array;
+
+}
+
+
+/* =========================================
+   FALLBACK ORDER
+   ========================================= */
+
+function createFallbackOrder(
+  team
+) {
+
+  const result =
+    shuffleArray(
+      [...team]
+    );
+
+
+  /*
+     Attempt to resolve
+     direct conflicts.
+  */
+
+  for (
+    let i = 0;
+    i < result.length;
+    i++
+  ) {
+
+    const previousOrder =
+      Number(
+        result[i].lastOrder
+      );
+
+
+    if (
+      Number.isFinite(
+        previousOrder
+      ) &&
+      previousOrder === i + 1
+    ) {
+
+      let swapped = false;
+
+
+      for (
+        let j = 0;
+        j < result.length;
+        j++
+      ) {
+
+        if (i === j) {
+          continue;
+        }
+
+
+        const otherPrevious =
+          Number(
+            result[j].lastOrder
+          );
+
+
+        /*
+           Check whether swapping
+           would improve the situation.
+        */
+
+        if (
+          otherPrevious !== i + 1 &&
+          previousOrder !== j + 1
+        ) {
+
+          [
+            result[i],
+            result[j]
+          ] =
+          [
+            result[j],
+            result[i]
+          ];
+
+
+          swapped = true;
+
+          break;
+
+        }
+
+      }
+
+    }
+
+  }
+
+
+  return result.map(
     (player, index) => ({
+
       ...player,
-      battingOrder: index + 1
+
+      battingOrder:
+        index + 1
+
     })
   );
 
 }
 
 
-/* DISPLAY BATTING ORDER */
+/* =========================================
+   DISPLAY BATTING ORDERS
+   ========================================= */
 
 function renderBattingOrders() {
 
   const team1Container =
-    document.getElementById("battingTeam1");
+    document.getElementById(
+      "battingTeam1"
+    );
+
 
   const team2Container =
-    document.getElementById("battingTeam2");
+    document.getElementById(
+      "battingTeam2"
+    );
 
 
   team1Container.innerHTML =
-    team1.map(player => `
+    team1.map(
+      player => `
 
-      <div class="batting-player">
+        <div class="batting-player">
 
-        <div class="batting-number">
-          ${player.battingOrder}
+          <div class="batting-number">
+
+            ${player.battingOrder}
+
+          </div>
+
+
+          <div>
+
+            ${escapeHtml(
+              player.name
+            )}
+
+          </div>
+
+
+          <div class="last-order">
+
+            ${
+              player.lastOrder !== null &&
+              player.lastOrder !== undefined &&
+              player.lastOrder !== ""
+
+                ? `Last: ${player.lastOrder}`
+
+                : "First order"
+
+            }
+
+          </div>
+
         </div>
 
-        <div>
-          ${escapeHtml(player.name)}
-        </div>
-
-      </div>
-
-    `).join("");
+      `
+    ).join("");
 
 
   team2Container.innerHTML =
-    team2.map(player => `
+    team2.map(
+      player => `
 
-      <div class="batting-player">
+        <div class="batting-player">
 
-        <div class="batting-number">
-          ${player.battingOrder}
+          <div class="batting-number">
+
+            ${player.battingOrder}
+
+          </div>
+
+
+          <div>
+
+            ${escapeHtml(
+              player.name
+            )}
+
+          </div>
+
+
+          <div class="last-order">
+
+            ${
+              player.lastOrder !== null &&
+              player.lastOrder !== undefined &&
+              player.lastOrder !== ""
+
+                ? `Last: ${player.lastOrder}`
+
+                : "First order"
+
+            }
+
+          </div>
+
         </div>
 
-        <div>
-          ${escapeHtml(player.name)}
-        </div>
-
-      </div>
-
-    `).join("");
+      `
+    ).join("");
 
 }
 
 
-/* CHANGE TEAMS */
+/* =========================================
+   CHANGE TEAMS
+   ========================================= */
 
 function changeTeams() {
 
-  document.getElementById("screen2")
-    .classList.remove("active");
+  document.getElementById(
+    "screen2"
+  ).classList.remove(
+    "active"
+  );
 
-  document.getElementById("screen1")
-    .classList.add("active");
+
+  document.getElementById(
+    "screen1"
+  ).classList.add(
+    "active"
+  );
 
 }
 
 
-/* START AGAIN */
+/* =========================================
+   START AGAIN
+   ========================================= */
 
 function startAgain() {
 
   team1 = [];
+
   team2 = [];
 
-  document.getElementById("saveMessage").innerText = "";
 
-  document.getElementById("screen2")
-    .classList.remove("active");
+  document.getElementById(
+    "saveMessage"
+  ).innerText = "";
 
-  document.getElementById("screen1")
-    .classList.add("active");
+
+  document.getElementById(
+    "screen2"
+  ).classList.remove(
+    "active"
+  );
+
+
+  document.getElementById(
+    "screen1"
+  ).classList.add(
+    "active"
+  );
+
 
   renderPlayers();
 
 }
 
 
-/* PIN MODAL */
+/* =========================================
+   PIN MODAL
+   ========================================= */
 
 function openPinModal() {
 
-  document.getElementById("pinInput").value = "";
-  document.getElementById("pinError").innerText = "";
+  document.getElementById(
+    "pinInput"
+  ).value = "";
 
-  document.getElementById("pinModal")
-    .classList.add("show");
 
-  setTimeout(() => {
-    document.getElementById("pinInput").focus();
-  }, 100);
+  document.getElementById(
+    "pinError"
+  ).innerText = "";
+
+
+  document.getElementById(
+    "pinModal"
+  ).classList.add(
+    "show"
+  );
+
+
+  setTimeout(
+    () => {
+
+      document.getElementById(
+        "pinInput"
+      ).focus();
+
+    },
+    100
+  );
 
 }
 
 
 function closePinModal() {
 
-  document.getElementById("pinModal")
-    .classList.remove("show");
+  document.getElementById(
+    "pinModal"
+  ).classList.remove(
+    "show"
+  );
 
 }
 
 
-/* VERIFY PIN */
+/* =========================================
+   VERIFY PIN
+   ========================================= */
 
 function verifyPinAndSave() {
 
   const pin =
-    document.getElementById("pinInput")
-      .value.trim();
+    document.getElementById(
+      "pinInput"
+    ).value.trim();
+
 
   const error =
-    document.getElementById("pinError");
+    document.getElementById(
+      "pinError"
+    );
 
 
-  if (pin !== SAVE_PIN) {
+  if (
+    pin !== SAVE_PIN
+  ) {
 
     error.innerText =
       "❌ Incorrect PIN";
 
-    document.getElementById("pinInput").value = "";
+
+    document.getElementById(
+      "pinInput"
+    ).value = "";
+
 
     return;
 
@@ -993,25 +1720,44 @@ function verifyPinAndSave() {
 }
 
 
-/* SAVE TO GOOGLE SHEETS */
+/* =========================================
+   SAVE BATTING ORDERS
+   ========================================= */
 
 async function saveBattingOrders() {
 
   const message =
-    document.getElementById("saveMessage");
+    document.getElementById(
+      "saveMessage"
+    );
 
 
   const assignments = [
 
-    ...team1.map(player => ({
-      id: player.id,
-      battingOrder: player.battingOrder
-    })),
+    ...team1.map(
+      player => ({
 
-    ...team2.map(player => ({
-      id: player.id,
-      battingOrder: player.battingOrder
-    }))
+        id:
+          player.id,
+
+        battingOrder:
+          player.battingOrder
+
+      })
+    ),
+
+
+    ...team2.map(
+      player => ({
+
+        id:
+          player.id,
+
+        battingOrder:
+          player.battingOrder
+
+      })
+    )
 
   ];
 
@@ -1019,83 +1765,127 @@ async function saveBattingOrders() {
   message.innerText =
     "Saving batting orders...";
 
+
   message.className = "";
 
 
   try {
 
     const response =
-      await fetch(API_URL, {
+      await fetch(
+        API_URL,
+        {
 
-        method: "POST",
+          method:
+            "POST",
 
-        headers: {
-          "Content-Type":
-            "text/plain;charset=utf-8"
-        },
+          headers: {
 
-        body: JSON.stringify({
+            "Content-Type":
+              "text/plain;charset=utf-8"
 
-          action: "confirm",
+          },
 
-          assignments: assignments
+          body:
+            JSON.stringify({
 
-        })
+              action:
+                "confirm",
 
-      });
+              assignments:
+                assignments
+
+            })
+
+        }
+      );
 
 
     const result =
       await response.json();
 
 
-    if (!result.success) {
+    if (
+      !result.success
+    ) {
 
       throw new Error(
-        result.error || "Save failed"
+        result.error ||
+        "Save failed"
       );
 
     }
 
 
     message.innerText =
-      "✅ Batting orders saved successfully.";
+      `✅ Batting orders saved successfully. ${result.recordsSaved || assignments.length} records added to history.`;
+
 
     message.className =
       "success-message";
 
 
-    /* UPDATE LAST ORDER IN MEMORY */
+    /*
+       IMPORTANT:
+       Update local lastOrder values
+       immediately after successful save.
+    */
 
-    assignments.forEach(assignment => {
+    assignments.forEach(
+      assignment => {
 
-      const player =
-        allPlayers.find(
-          p => p.id === assignment.id
-        );
+        const player =
+          allPlayers.find(
+            p =>
+              p.id === assignment.id
+          );
 
-      if (player) {
 
-        player.lastOrder =
-          assignment.battingOrder;
+        if (player) {
+
+          player.lastOrder =
+            assignment.battingOrder;
+
+        }
 
       }
-
-    });
-
-
-    localStorage.setItem(
-      CACHE_KEY,
-      JSON.stringify(allPlayers)
     );
+
+
+    /*
+       Update localStorage.
+    */
+
+    try {
+
+      localStorage.setItem(
+        CACHE_KEY,
+        JSON.stringify(
+          allPlayers
+        )
+      );
+
+    } catch (error) {
+
+      console.log(
+        "Cache update error:",
+        error
+      );
+
+    }
 
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "Save error:",
+      error
+    );
+
 
     message.innerText =
       "❌ Failed to save batting orders.";
+
 
     message.className =
       "error-message";
@@ -1105,21 +1895,47 @@ async function saveBattingOrders() {
 }
 
 
-/* SAFELY DISPLAY PLAYER NAMES */
+/* =========================================
+   ESCAPE HTML
+   ========================================= */
 
-function escapeHtml(value) {
+function escapeHtml(
+  value
+) {
 
   return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
 
-/* START */
+/* =========================================
+   START APPLICATION
+   ========================================= */
 
 loadPlayers();
 

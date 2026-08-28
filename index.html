@@ -1942,7 +1942,7 @@ async function verifyResetPassword() {
 
   if (!confirmed) return;
 
-  error.innerText = "Resetting...";
+  errorEl.innerText = "Resetting...";
 
   try {
     const response = await fetch(API_URL, {

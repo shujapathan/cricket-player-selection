@@ -315,6 +315,79 @@
       flex: 1;
     }
 
+    /* HISTORY / ADMIN */
+
+    .top-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 12px 0 20px;
+    }
+
+    .history-table-wrap {
+      overflow-x: auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.1);
+    }
+
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+    }
+
+    .history-table th,
+    .history-table td {
+      padding: 11px 10px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .history-table th {
+      background: #f5f5f5;
+      font-size: 13px;
+    }
+
+    .history-table td {
+      font-size: 13px;
+    }
+
+    .history-filter {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+      margin-bottom: 12px;
+    }
+
+    .danger {
+      background: #c62828;
+    }
+
+    .warning-box {
+      background: #fff8e1;
+      border: 1px solid #ffcc80;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 12px 0;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    #adminPasswordInput {
+      width: 100%;
+      padding: 14px;
+      font-size: 24px;
+      text-align: center;
+      letter-spacing: 8px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+    }
+
     /* MOBILE */
 
     @media (max-width: 700px) {
@@ -386,6 +459,11 @@
 
     <div id="status">
       Loading players...
+    </div>
+
+    <div class="top-actions">
+      <button class="secondary" onclick="showHistory()">📋 Batting History</button>
+      <button class="danger" onclick="openResetModal()">🔄 Reset Batting Number Cycle</button>
     </div>
 
     <div class="card">
@@ -563,6 +641,35 @@
 </div>
 
 
+  <!-- =====================================
+       SCREEN 3 - BATTING HISTORY
+       ===================================== -->
+
+  <div id="screen3" class="screen">
+    <h1>📋 Batting History</h1>
+
+    <div class="top-actions">
+      <button class="secondary" onclick="backToTeams()">← Back to Teams</button>
+      <button class="primary" onclick="loadHistory()">↻ Refresh History</button>
+      <button class="danger" onclick="openResetModal()">🔄 Reset Batting Number Cycle</button>
+    </div>
+
+    <div class="card">
+      <input id="historyFilter" class="history-filter" type="search" placeholder="Search player name, Player ID, team or batting number..." oninput="renderHistory()">
+      <div id="historyStatus" class="info-message" style="text-align:center;margin-bottom:12px;"></div>
+      <div class="history-table-wrap">
+        <table class="history-table">
+          <thead><tr>
+            <th>Date &amp; Time</th><th>Player ID</th><th>Player Name</th><th>Team</th><th>Batting Order</th><th>Cycle</th><th>New Number?</th>
+          </tr></thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
 
 <!-- =====================================
      PIN MODAL
@@ -623,6 +730,38 @@
 
 
 
+
+<!-- =====================================
+     RESET CYCLE MODAL
+     ===================================== -->
+
+<div id="resetModal" class="modal">
+  <div class="modal-content">
+    <h2>🔐 Reset Number Cycle</h2>
+    <p>Enter the admin password to clear all batting-number history.</p>
+
+    <div class="warning-box">
+      ⚠️ This will clear all batting history and reset every player's
+      <strong>Last Batting Order</strong>. Player IDs, names and teams will remain unchanged.
+    </div>
+
+    <input
+      type="password"
+      id="adminPasswordInput"
+      inputmode="numeric"
+      maxlength="4"
+      placeholder="••••"
+      autocomplete="off">
+
+    <div id="resetError" class="pin-error"></div>
+
+    <div class="modal-buttons">
+      <button class="secondary" onclick="closeResetModal()">Cancel</button>
+      <button class="danger" onclick="verifyResetPassword()">Reset Cycle</button>
+    </div>
+  </div>
+</div>
+
 <script>
 
 
@@ -639,6 +778,10 @@ const SAVE_PIN = "7777";
 
 const CACHE_KEY =
 "cricketPlayers";
+
+const RESET_PASSWORD = "7777";
+
+let battingHistory = [];
 
 
 /* =========================================
@@ -1682,6 +1825,161 @@ function startAgain() {
 
 }
 
+
+
+/* =========================================
+   BATTING HISTORY
+   ========================================= */
+
+function showHistory() {
+  document.getElementById("screen1").classList.remove("active");
+  document.getElementById("screen2").classList.remove("active");
+  document.getElementById("screen3").classList.add("active");
+  loadHistory();
+}
+
+function backToTeams() {
+  document.getElementById("screen3").classList.remove("active");
+  document.getElementById("screen2").classList.remove("active");
+  document.getElementById("screen1").classList.add("active");
+}
+
+async function loadHistory() {
+  const status = document.getElementById("historyStatus");
+  status.innerText = "Loading batting history...";
+
+  try {
+    const response = await fetch(API_URL + "?action=history");
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const result = await response.json();
+    if (!result.success) throw new Error(result.error || "Failed to load history");
+
+    battingHistory = result.history || [];
+    renderHistory();
+    status.innerText = battingHistory.length + " history record(s)";
+  } catch (error) {
+    console.error("History error:", error);
+    status.innerText = "❌ Failed to load batting history: " + (error.message || "Unknown error");
+  }
+}
+
+function renderHistory() {
+  const body = document.getElementById("historyBody");
+  if (!body) return;
+
+  const filter = String(document.getElementById("historyFilter")?.value || "").trim().toLowerCase();
+
+  const filtered = battingHistory.filter(item => {
+    if (!filter) return true;
+    return [
+      item.playerId,
+      item.playerName,
+      item.team,
+      item.battingOrder,
+      item.cycleNumber
+    ].some(value => String(value ?? "").toLowerCase().includes(filter));
+  });
+
+  if (filtered.length === 0) {
+    body.innerHTML = '<tr><td colspan="7" class="empty">No batting history found.</td></tr>';
+    return;
+  }
+
+  body.innerHTML = filtered.map(item => {
+    const date = item.matchDate ? new Date(item.matchDate) : null;
+    const formatted = date && !isNaN(date.getTime())
+      ? date.toLocaleString()
+      : String(item.matchDate || "");
+
+    return `
+      <tr>
+        <td>${escapeHtml(formatted)}</td>
+        <td>${escapeHtml(item.playerId)}</td>
+        <td><strong>${escapeHtml(item.playerName)}</strong></td>
+        <td>${escapeHtml(item.team)}</td>
+        <td><strong>${escapeHtml(item.battingOrder)}</strong></td>
+        <td>${escapeHtml(item.cycleNumber ?? "-")}</td>
+        <td>${item.isNewNumber ? "YES" : "NO"}</td>
+      </tr>
+    `;
+  }).join("");
+}
+
+/* =========================================
+   RESET BATTING NUMBER CYCLE
+   ========================================= */
+
+function openResetModal() {
+  document.getElementById("adminPasswordInput").value = "";
+  document.getElementById("resetError").innerText = "";
+  document.getElementById("resetModal").classList.add("show");
+
+  setTimeout(() => {
+    document.getElementById("adminPasswordInput").focus();
+  }, 100);
+}
+
+function closeResetModal() {
+  document.getElementById("resetModal").classList.remove("show");
+}
+
+async function verifyResetPassword() {
+  const input = document.getElementById("adminPasswordInput");
+  const errorEl = document.getElementById("resetError");
+  const password = input.value.trim();
+
+  if (password !== RESET_PASSWORD) {
+    errorEl.innerText = "❌ Incorrect admin password";
+    input.value = "";
+    input.focus();
+    return;
+  }
+
+  const confirmed = confirm(
+    "⚠️ This will permanently clear ALL batting-number history and reset every player's Last Batting Order.\n\nPlayer IDs, names and teams will NOT be deleted.\n\nContinue?"
+  );
+
+  if (!confirmed) return;
+
+  error.innerText = "Resetting...";
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify({ action: "resetCycle" })
+    });
+
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const result = await response.json();
+    if (!result.success) throw new Error(result.error || "Reset failed");
+
+    battingHistory = [];
+
+    allPlayers.forEach(player => {
+      player.lastOrder = null;
+    });
+
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(allPlayers));
+    } catch (ignored) {}
+
+    closeResetModal();
+    alert("✅ Batting Number Cycle has been reset successfully.\n\nAll players can now start a fresh 1–15 cycle.");
+
+    if (document.getElementById("screen3").classList.contains("active")) {
+      renderHistory();
+      document.getElementById("historyStatus").innerText = "0 history records — fresh cycle started.";
+    }
+  } catch (error) {
+    console.error("Reset error:", error);
+    errorEl.innerText = "❌ Reset failed: " + (error.message || "Unknown error");
+  }
+}
 
 /* =========================================
    PIN MODAL

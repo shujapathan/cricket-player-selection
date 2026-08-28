@@ -1167,43 +1167,97 @@ function goToBattingOrder() {
    GENERATE BATTING ORDERS
    ========================================= */
 
-function generateBattingOrders() {
+async function generateBattingOrders() {
 
-  /*
-     Generate each team separately.
+  const info = document.getElementById("generationInfo");
+  const message = document.getElementById("saveMessage");
 
-     The algorithm ensures that,
-     whenever possible, a player does
-     NOT receive the same number as
-     their previous saved order.
-  */
+  info.innerText = "🎲 Generating batting orders using player history...";
+  message.innerText = "";
+  message.className = "";
 
-  team1 =
-    generateTeamOrder(
-      team1
-    );
+  const players = [
+    ...team1.map(player => ({ id: player.id, team: "Team 1" })),
+    ...team2.map(player => ({ id: player.id, team: "Team 2" }))
+  ];
 
+  if (players.length === 0) {
+    info.innerText = "❌ No players selected.";
+    return;
+  }
 
-  team2 =
-    generateTeamOrder(
-      team2
-    );
+  try {
 
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify({
+        action: "generate",
+        players: players
+      })
+    });
 
-  renderBattingOrders();
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
+    }
 
+    const result = await response.json();
 
-  const info =
-    document.getElementById(
-      "generationInfo"
-    );
+    if (!result.success) {
+      throw new Error(result.error || "Failed to generate batting orders");
+    }
 
+    const generated = result.assignments || [];
 
-  info.innerText =
-    "🎲 New batting orders generated. Previous saved orders are avoided where possible.";
+    if (generated.length !== players.length) {
+      throw new Error(
+        "The server returned an incomplete batting order. Please try again."
+      );
+    }
 
+    const generatedById = {};
+    generated.forEach(item => {
+      generatedById[String(item.id)] = item;
+    });
+
+    team1 = team1.map(player => {
+      const item = generatedById[String(player.id)];
+      return item
+        ? {
+            ...player,
+            battingOrder: Number(item.battingOrder),
+            isNewNumber: item.isNewNumber
+          }
+        : player;
+    });
+
+    team2 = team2.map(player => {
+      const item = generatedById[String(player.id)];
+      return item
+        ? {
+            ...player,
+            battingOrder: Number(item.battingOrder),
+            isNewNumber: item.isNewNumber
+          }
+        : player;
+    });
+
+    renderBattingOrders();
+
+    info.innerText =
+      `🎲 New batting orders generated. Player cycle: 1–${result.cycleSize || 15}. Unused numbers are prioritized.`;
+
+  } catch (error) {
+
+    console.error("Generation error:", error);
+
+    info.innerText =
+      "❌ Failed to generate batting orders: " +
+      (error.message || "Unknown error");
+  }
 }
-
 
 /* =========================================
    GENERATE TEAM ORDER
@@ -1736,26 +1790,17 @@ async function saveBattingOrders() {
 
     ...team1.map(
       player => ({
-
-        id:
-          player.id,
-
-        battingOrder:
-          player.battingOrder
-
+        id: player.id,
+        team: "Team 1",
+        battingOrder: player.battingOrder
       })
     ),
 
-
     ...team2.map(
       player => ({
-
-        id:
-          player.id,
-
-        battingOrder:
-          player.battingOrder
-
+        id: player.id,
+        team: "Team 2",
+        battingOrder: player.battingOrder
       })
     )
 
@@ -1884,7 +1929,8 @@ async function saveBattingOrders() {
 
 
     message.innerText =
-      "❌ Failed to save batting orders.";
+      "❌ Failed to save batting orders: " +
+      (error.message || "Unknown error");
 
 
     message.className =

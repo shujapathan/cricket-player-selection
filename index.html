@@ -106,6 +106,12 @@
       transform: scale(.98);
     }
 
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     .player-actions button {
       flex: 1;
       padding: 10px 5px;
@@ -161,6 +167,46 @@
       color: #888;
       text-align: center;
       padding: 25px 5px;
+    }
+
+    .selection-summary {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 0 0 16px;
+    }
+
+    .selection-stat {
+      background: #f5f5f5;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .summary-player {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f5f5f5;
+      padding: 9px 10px;
+      margin: 7px 0;
+      border-radius: 7px;
+    }
+
+    .summary-player-name {
+      flex: 1;
+      word-break: break-word;
+    }
+
+    .summary-remove {
+      width: auto;
+      margin: 0;
+      padding: 6px 9px;
+      font-size: 11px;
+      background: #777;
+      flex-shrink: 0;
     }
 
     .count {
@@ -470,6 +516,12 @@
 
       <h2>Assign Players</h2>
 
+      <div class="selection-summary">
+        <div class="selection-stat">Available: <span id="unassignedCount">0</span></div>
+        <div class="selection-stat">Team 1: <span id="team1CountTop">0</span></div>
+        <div class="selection-stat">Team 2: <span id="team2CountTop">0</span></div>
+      </div>
+
       <div id="allPlayers"
            class="players-grid">
       </div>
@@ -595,30 +647,15 @@
 
     <div id="saveMessage"></div>
 
+    <div class="info-message" style="text-align:center;margin:8px 0 12px;">🔒 Batting order is generated once and locked for this match.</div>
+
 
     <div class="button-area">
 
 
       <button
-        class="secondary"
-        onclick="changeTeams()">
-
-        ← Change Teams
-
-      </button>
-
-
-      <button
-        class="shuffle"
-        onclick="generateBattingOrders()">
-
-        🎲 Regenerate
-
-      </button>
-
-
-      <button
         class="save"
+        id="saveOrdersButton"
         onclick="openPinModal()">
 
         💾 Save Batting Orders
@@ -757,7 +794,6 @@
 
     <div class="modal-buttons">
       <button class="secondary" onclick="closeResetModal()">Cancel</button>
-      <button class="danger" onclick="verifyResetPassword()">Reset Cycle</button>
     </div>
   </div>
 </div>
@@ -793,6 +829,10 @@ let allPlayers = [];
 let team1 = [];
 
 let team2 = [];
+
+let battingOrderGenerated = false;
+let battingOrderSaved = false;
+let generationInProgress = false;
 
 
 /* =========================================
@@ -947,134 +987,50 @@ function loadPlayers() {
 function renderPlayers() {
 
   const container =
-    document.getElementById(
-      "allPlayers"
-    );
-
+    document.getElementById("allPlayers");
 
   container.innerHTML = "";
 
+  const assignedIds = new Set([
+    ...team1.map(player => String(player.id)),
+    ...team2.map(player => String(player.id))
+  ]);
 
-  allPlayers.forEach(
-    player => {
-
-
-      let currentTeam = "";
-
-
-      if (
-        team1.some(
-          p =>
-            p.id === player.id
-        )
-      ) {
-
-        currentTeam =
-          "🔵 Team 1";
-
-      }
-
-
-      if (
-        team2.some(
-          p =>
-            p.id === player.id
-        )
-      ) {
-
-        currentTeam =
-          "🟠 Team 2";
-
-      }
-
-
-      const card =
-        document.createElement(
-          "div"
-        );
-
-
-      card.className =
-        "player-card";
-
-
-      card.innerHTML = `
-
-        <div class="player-name">
-
-          ${escapeHtml(
-            player.name
-          )}
-
-        </div>
-
-
-        <div class="player-team">
-
-          ${
-            currentTeam ||
-            "Not assigned"
-          }
-
-        </div>
-
-
-        <div class="player-actions">
-
-          <button
-            class="team1-btn"
-            onclick="assignPlayer(
-              '${player.id}',
-              'team1'
-            )">
-
-            🔵 Team 1
-
-          </button>
-
-
-          <button
-            class="team2-btn"
-            onclick="assignPlayer(
-              '${player.id}',
-              'team2'
-            )">
-
-            🟠 Team 2
-
-          </button>
-
-        </div>
-
-
-        ${
-          currentTeam
-            ? `
-
-              <button
-                class="remove-btn"
-                onclick="removePlayer(
-                  '${player.id}'
-                )">
-
-                Remove
-
-              </button>
-
-            `
-            : ""
-        }
-
-      `;
-
-
-      container.appendChild(
-        card
-      );
-
-    }
+  const unassignedPlayers = allPlayers.filter(
+    player => !assignedIds.has(String(player.id))
   );
 
+  const unassignedCount = document.getElementById("unassignedCount");
+  if (unassignedCount) unassignedCount.innerText = unassignedPlayers.length;
+
+  const team1CountTop = document.getElementById("team1CountTop");
+  if (team1CountTop) team1CountTop.innerText = team1.length;
+
+  const team2CountTop = document.getElementById("team2CountTop");
+  if (team2CountTop) team2CountTop.innerText = team2.length;
+
+  if (unassignedPlayers.length === 0) {
+    container.innerHTML =
+      '<div class="empty" style="grid-column:1/-1;">All loaded players have been assigned to a team.</div>';
+  } else {
+    unassignedPlayers.forEach(player => {
+      const card = document.createElement("div");
+      card.className = "player-card";
+
+      const safeId = String(player.id).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+
+      card.innerHTML = `
+        <div class="player-name">${escapeHtml(player.name)}</div>
+        <div class="player-team">ID: ${escapeHtml(player.id)}</div>
+        <div class="player-actions">
+          <button class="team1-btn" onclick="assignPlayer('${safeId}', 'team1')">🔵 Team 1</button>
+          <button class="team2-btn" onclick="assignPlayer('${safeId}', 'team2')">🟠 Team 2</button>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+  }
 
   renderTeamSummary();
 
@@ -1089,6 +1045,11 @@ function assignPlayer(
   playerId,
   targetTeam
 ) {
+
+  if (battingOrderGenerated) {
+    alert("Batting order has already been generated for this match. Start a new match to change teams.");
+    return;
+  }
 
   const player =
     allPlayers.find(
@@ -1155,6 +1116,11 @@ function removePlayer(
   playerId
 ) {
 
+  if (battingOrderGenerated) {
+    alert("Batting order has already been generated for this match. Start a new match to change teams.");
+    return;
+  }
+
   team1 =
     team1.filter(
       p =>
@@ -1180,62 +1146,35 @@ function removePlayer(
 
 function renderTeamSummary() {
 
-  document.getElementById(
-    "team1Count"
-  ).innerText =
-    team1.length;
+  document.getElementById("team1Count").innerText = team1.length;
+  document.getElementById("team2Count").innerText = team2.length;
 
+  const team1Container = document.getElementById("team1Summary");
+  const team2Container = document.getElementById("team2Summary");
 
-  document.getElementById(
-    "team2Count"
-  ).innerText =
-    team2.length;
+  team1Container.innerHTML = team1.length === 0
+    ? `<div class="empty">No players assigned</div>`
+    : team1.map(player => {
+        const safeId = String(player.id).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+        return `
+          <div class="summary-player">
+            <div class="summary-player-name">${escapeHtml(player.name)}</div>
+            <button class="summary-remove" onclick="removePlayer('${safeId}')">Remove</button>
+          </div>
+        `;
+      }).join("");
 
-
-  const team1Container =
-    document.getElementById(
-      "team1Summary"
-    );
-
-
-  const team2Container =
-    document.getElementById(
-      "team2Summary"
-    );
-
-
-  team1Container.innerHTML =
-    team1.length === 0
-
-      ? `<div class="empty">
-           No players assigned
-         </div>`
-
-      : team1.map(
-          player =>
-            `<div class="summary-player">
-              ${escapeHtml(
-                player.name
-              )}
-            </div>`
-        ).join("");
-
-
-  team2Container.innerHTML =
-    team2.length === 0
-
-      ? `<div class="empty">
-           No players assigned
-         </div>`
-
-      : team2.map(
-          player =>
-            `<div class="summary-player">
-              ${escapeHtml(
-                player.name
-              )}
-            </div>`
-        ).join("");
+  team2Container.innerHTML = team2.length === 0
+    ? `<div class="empty">No players assigned</div>`
+    : team2.map(player => {
+        const safeId = String(player.id).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+        return `
+          <div class="summary-player">
+            <div class="summary-player-name">${escapeHtml(player.name)}</div>
+            <button class="summary-remove" onclick="removePlayer('${safeId}')">Remove</button>
+          </div>
+        `;
+      }).join("");
 
 }
 
@@ -1245,6 +1184,11 @@ function renderTeamSummary() {
    ========================================= */
 
 function clearTeams() {
+
+  if (battingOrderGenerated) {
+    alert("Batting order has already been generated for this match. Start a new match to change teams.");
+    return;
+  }
 
   if (
     !confirm(
@@ -1312,6 +1256,10 @@ function goToBattingOrder() {
 
 async function generateBattingOrders() {
 
+  if (battingOrderGenerated || generationInProgress) return;
+
+  generationInProgress = true;
+
   const info = document.getElementById("generationInfo");
   const message = document.getElementById("saveMessage");
 
@@ -1326,6 +1274,7 @@ async function generateBattingOrders() {
 
   if (players.length === 0) {
     info.innerText = "❌ No players selected.";
+    generationInProgress = false;
     return;
   }
 
@@ -1389,10 +1338,22 @@ async function generateBattingOrders() {
 
     renderBattingOrders();
 
+    battingOrderGenerated = true;
+    battingOrderSaved = false;
+    generationInProgress = false;
+
+    const saveButton = document.getElementById("saveOrdersButton");
+    if (saveButton) {
+      saveButton.disabled = false;
+      saveButton.innerText = "💾 Save Batting Orders";
+    }
+
     info.innerText =
-      `🎲 New batting orders generated. Player cycle: 1–${result.cycleSize || 15}. Unused numbers are prioritized.`;
+      `🎲 Batting orders generated and locked. Player cycle: 1–${result.cycleSize || 17}. Unused numbers are prioritized.`;
 
   } catch (error) {
+
+    generationInProgress = false;
 
     console.error("Generation error:", error);
 
@@ -1770,28 +1731,6 @@ function renderBattingOrders() {
 
 
 /* =========================================
-   CHANGE TEAMS
-   ========================================= */
-
-function changeTeams() {
-
-  document.getElementById(
-    "screen2"
-  ).classList.remove(
-    "active"
-  );
-
-
-  document.getElementById(
-    "screen1"
-  ).classList.add(
-    "active"
-  );
-
-}
-
-
-/* =========================================
    START AGAIN
    ========================================= */
 
@@ -1800,6 +1739,10 @@ function startAgain() {
   team1 = [];
 
   team2 = [];
+
+  battingOrderGenerated = false;
+  battingOrderSaved = false;
+  generationInProgress = false;
 
 
   document.getElementById(
@@ -1964,12 +1907,16 @@ async function verifyResetPassword() {
       player.lastOrder = null;
     });
 
+    battingOrderGenerated = false;
+    battingOrderSaved = false;
+    generationInProgress = false;
+
     try {
       localStorage.setItem(CACHE_KEY, JSON.stringify(allPlayers));
     } catch (ignored) {}
 
     closeResetModal();
-    alert("✅ Batting Number Cycle has been reset successfully.\n\nAll players can now start a fresh 1–15 cycle.");
+    alert("✅ Batting Number Cycle has been reset successfully.\n\nAll players can now start a fresh 1–17 cycle.");
 
     if (document.getElementById("screen3").classList.contains("active")) {
       renderHistory();
@@ -2078,6 +2025,16 @@ function verifyPinAndSave() {
 
 async function saveBattingOrders() {
 
+  if (!battingOrderGenerated) {
+    alert("Please generate the batting order first.");
+    return;
+  }
+
+  if (battingOrderSaved) {
+    alert("This batting order has already been saved.");
+    return;
+  }
+
   const message =
     document.getElementById(
       "saveMessage"
@@ -2166,6 +2123,14 @@ async function saveBattingOrders() {
 
     message.className =
       "success-message";
+
+    battingOrderSaved = true;
+
+    const saveButton = document.getElementById("saveOrdersButton");
+    if (saveButton) {
+      saveButton.disabled = true;
+      saveButton.innerText = "✅ Batting Orders Saved";
+    }
 
 
     /*

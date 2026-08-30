@@ -794,6 +794,7 @@
 
     <div class="modal-buttons">
       <button class="secondary" onclick="closeResetModal()">Cancel</button>
+      <button class="danger" onclick="verifyResetPassword()">Reset Cycle</button>
     </div>
   </div>
 </div>
@@ -1862,6 +1863,19 @@ function openResetModal() {
     document.getElementById("adminPasswordInput").focus();
   }, 100);
 }
+
+// Allow the admin to submit the reset password by pressing Enter.
+document.addEventListener("DOMContentLoaded", () => {
+  const resetInput = document.getElementById("adminPasswordInput");
+  if (resetInput) {
+    resetInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        verifyResetPassword();
+      }
+    });
+  }
+});
 
 function closeResetModal() {
   document.getElementById("resetModal").classList.remove("show");
